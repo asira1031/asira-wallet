@@ -121,10 +121,9 @@ export default function AsiraWalletSignupPage() {
               className="w-full mt-2 rounded-xl bg-black/40 border border-white/10 px-4 py-3 outline-none"
             />
           </div>
-
-          <button
+<button
   type="button"
-  onClick={handleSignup}
+  onClick={() => handleSignup()}
   className="w-full rounded-2xl bg-green-500 hover:bg-green-400 transition-all py-4 font-semibold text-black"
 >
   Continue
