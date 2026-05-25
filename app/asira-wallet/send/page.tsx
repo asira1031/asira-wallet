@@ -7,13 +7,25 @@ export default function SendMoneyPage() {
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
 
-  function handleSend() {
-    if (!receiverWalletId || !amount || Number(amount) <= 0) {
-      setMessage("❌ Please enter receiver wallet ID and valid amount");
+  async function handleSend() {
+    setMessage("");
+
+    const res = await fetch("/api/asira-wallet/send-money", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ receiverWalletId, amount }),
+    });
+
+    const data = await res.json();
+
+    if (!data.ok) {
+      setMessage(`❌ ${data.message}`);
       return;
     }
 
-    setMessage(`✅ Sent successfully to ${receiverWalletId}. Reference: AW-SEND-${Date.now()}`);
+    setMessage(`✅ Sent successfully. Reference: ${data.reference}`);
     setReceiverWalletId("");
     setAmount("");
   }
