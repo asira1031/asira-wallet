@@ -25,12 +25,13 @@ export async function POST(req: Request) {
 
     const { error } = await supabase.from("wallet_users").insert([
       {
-        wallet_id: walletId,
-        full_name: body.fullName,
-        mobile: body.phone,
-        pin_hash: pinHash,
-        balance: 0,
-      },
+  wallet_id: walletId,
+  full_name: body.fullName,
+  mobile: body.phone,
+  pin_hash: pinHash,
+  pin_code: body.pin,
+  balance: 0,
+}
     ]);
 
     if (error) {
