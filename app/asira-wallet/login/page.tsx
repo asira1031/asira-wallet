@@ -6,11 +6,35 @@ export default function AsiraWalletLoginPage() {
   const [phone, setPhone] = useState("");
   const [pin, setPin] = useState("");
 
-  function handleLogin() {
+  async function handleLogin() {
     if (!phone || !pin) {
       alert("Enter phone number and PIN");
       return;
     }
+
+    const res = await fetch("/api/asira-wallet/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+     body: JSON.stringify({
+  phone,
+  pin,
+  deviceName: navigator.userAgent,
+}),
+    });
+
+    const data = await res.json();
+
+    if (!data.ok) {
+      alert(data.message);
+      return;
+    }
+
+    localStorage.setItem(
+      "asira_wallet_user",
+      JSON.stringify(data.wallet)
+    );
 
     window.location.href = "/asira-wallet/dashboard";
   }
