@@ -123,12 +123,12 @@ export default function AsiraWalletSignupPage() {
           </div>
 
           <button
-            onClick={handleSignup}
-            className="w-full rounded-2xl bg-green-500 hover:bg-green-400 transition-all py-4 font-semibold text-black"
-          >
-            Continue
-          </button>
-
+  type="button"
+  onClick={handleSignup}
+  className="w-full rounded-2xl bg-green-500 hover:bg-green-400 transition-all py-4 font-semibold text-black"
+>
+  Continue
+</button>
           <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-white/50">
             OTP verification and biometric login will be activated during integration phase.
           </div>
