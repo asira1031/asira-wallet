@@ -1,54 +1,61 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import crypto from "crypto";
-
-function hashPin(pin: string) {
-  return crypto
-    .createHash("sha256")
-    .update(pin)
-    .digest("hex");
-}
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    if (!body.fullName || !body.phone || !body.pin) {
-      return NextResponse.json({
-        ok: false,
-        message: "Please complete all required fields",
-      });
+    const { fullName, mobile, birthday, birthPlace, pin } = body;
+
+    if (!fullName || !mobile || !birthday || !birthPlace || !pin) {
+      return NextResponse.json(
+        { message: "Missing required fields." },
+        { status: 400 }
+      );
     }
 
-    const walletId = `AW-${Date.now()}`;
-    const pinHash = hashPin(body.pin);
+    if (pin.length !== 6) {
+      return NextResponse.json(
+        { message: "PIN must be 6 digits." },
+        { status: 400 }
+      );
+    }
 
-    const { error } = await supabase.from("wallet_users").insert([
-      {
-  wallet_id: walletId,
-  full_name: body.fullName,
-  mobile: body.phone,
-  pin_hash: pinHash,
-  pin_code: body.pin,
-  balance: 0,
-}
-    ]);
+    const walletId = "AW-" + Date.now();
+
+    const { data, error } = await supabase
+      .from("wallet_users")
+      .insert([
+        {
+          full_name: fullName,
+          mobile,
+          birthday,
+          birth_place: birthPlace,
+          pin,
+          balance: 0,
+          wallet_id: walletId,
+        },
+      ])
+      .select()
+      .single();
 
     if (error) {
-      return NextResponse.json({
-        ok: false,
-        message: error.message,
-      });
+      return NextResponse.json(
+        { message: error.message },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({
-      ok: true,
-      walletId,
+      success: true,
+      user: data,
     });
-  } catch (error: any) {
-    return NextResponse.json({
-      ok: false,
-      message: error.message || "Signup failed",
-    });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Server error." },
+      { status: 500 }
+    );
   }
-}
+}git add .
+git commit -m "Update wallet signup API for birth details"
+git push origin main
