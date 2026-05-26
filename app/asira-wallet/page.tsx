@@ -86,7 +86,7 @@ export default function AsiraWalletIntroPage() {
           </button>
 
           <button
-            onClick={() => router.push("/asira-wallet/dashboard")}
+           onClick={() => router.push("/asira-wallet/signup")}
             className="rounded-2xl bg-black py-4 font-bold text-white"
           >
             Open Wallet
