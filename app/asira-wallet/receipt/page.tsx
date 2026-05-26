@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Receipt = {
@@ -13,15 +14,18 @@ type Receipt = {
 
 export default function ReceiptPage() {
   const router = useRouter();
+  const [receipt, setReceipt] = useState<Receipt | null>(null);
 
-  const stored = localStorage.getItem("asira_wallet_latest_receipt");
-  const receipt: Receipt | null = stored ? JSON.parse(stored) : null;
+  useEffect(() => {
+    const stored = localStorage.getItem("asira_wallet_latest_receipt");
+    setReceipt(stored ? JSON.parse(stored) : null);
+  }, []);
 
   const type = receipt?.type || "Transaction";
   const method = receipt?.method || "Asira Wallet";
   const recipient = receipt?.recipient || "-";
   const amount = receipt?.amount || 0;
-  const reference = receipt?.id || `AW-${Date.now()}`;
+  const reference = receipt?.id || "-";
 
   return (
     <main className="min-h-screen bg-[#f5f5f5] px-5 py-8 text-black">
@@ -33,7 +37,6 @@ export default function ReceiptPage() {
             </div>
 
             <h1 className="mt-5 text-3xl font-bold">Payment Successful</h1>
-
             <p className="mt-2 text-gray-500">
               Your transaction has been completed.
             </p>
