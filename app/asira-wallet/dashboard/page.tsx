@@ -1,162 +1,363 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
+import { QRCodeCanvas } from "qrcode.react";
 
-export default function WalletDashboard() {
-  const [wallet, setWallet] = useState<any>(null);
-  const [balance, setBalance] = useState(0);
+type Tab = "wallet" | "savings" | "credit" | "loans" | "cards";
+
+export default function AsiraWalletDashboard() {
+  const router = useRouter();
+
+  const [tab, setTab] = useState<Tab>("wallet");
+  const [showQr, setShowQr] = useState(false);
+
+  const savingsAccount = "ASIRA-SAV-0000000001";
 
   useEffect(() => {
-    async function loadLoggedInWallet() {
-      const savedUser = localStorage.getItem("asira_wallet_user");
+    const loggedIn = localStorage.getItem("asira_wallet_logged_in");
 
-      if (!savedUser) {
-        window.location.href = "/asira-wallet/login";
-        return;
-      }
-
-      const parsedUser = JSON.parse(savedUser);
-      setWallet(parsedUser);
-
-      const { data } = await supabase
-        .from("wallet_users")
-        .select("*")
-        .eq("wallet_id", parsedUser.wallet_id)
-        .single();
-
-      if (data) {
-        setWallet(data);
-        setBalance(Number(data.balance || 0));
-        localStorage.setItem("asira_wallet_user", JSON.stringify(data));
-      }
+    if (loggedIn !== "yes") {
+      router.push("/asira-wallet/login");
     }
-
-    loadLoggedInWallet();
-  }, []);
+  }, [router]);
 
   function handleLogout() {
-    localStorage.removeItem("asira_wallet_user");
-    window.location.href = "/asira-wallet/login";
-  }
+    localStorage.removeItem("asira_wallet_logged_in");
+    localStorage.removeItem("asira_wallet_phone");
 
-  const actions = [
-    { icon: "⬇️", title: "Cash In", href: "/asira-wallet/cash-in" },
-    { icon: "⬆️", title: "Cash Out", href: "/asira-wallet/cash-out" },
-    { icon: "🏦", title: "Send", href: "/asira-wallet/send" },
-    { icon: "🧾", title: "Bills", href: "/asira-wallet/history" },
-    { icon: "📱", title: "Pay QR", href: "/asira-wallet/qr" },
-    { icon: "📊", title: "History", href: "/asira-wallet/history" },
-  ];
-
-  if (!wallet) {
-    return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center">
-        <p className="text-white/50">Loading wallet...</p>
-      </main>
-    );
+    router.push("/asira-wallet/login");
   }
 
   return (
-    <main className="min-h-screen bg-black text-white pb-28">
-      <div className="max-w-md mx-auto">
-        <div className="px-5 pt-8 pb-4 flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">ASIRA WALLET</h1>
-            <p className="text-white/40 text-sm mt-1">
-              Welcome, {wallet.full_name || "Wallet User"}
-            </p>
+    <main className="min-h-screen bg-[#f7f7f7] px-4 py-6 text-black">
+      <div className="mx-auto max-w-sm pb-32">
+
+        <div className="mb-8 flex items-center justify-between">
+
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
+            👤
           </div>
+
+          <div className="flex items-center gap-4">
+
+            <button
+              onClick={handleLogout}
+              className="rounded-full bg-red-500 px-4 py-2 text-xs font-bold text-white"
+            >
+              Logout
+            </button>
+
+            <div className="rounded-full bg-emerald-700 px-4 py-2 text-sm font-bold text-white">
+              0 XP
+            </div>
+
+          </div>
+        </div>
+
+        <div className="mb-6 flex gap-3 overflow-x-auto">
+          {["wallet", "savings", "credit", "loans", "cards"].map((item) => (
+            <button
+              key={item}
+              onClick={() => setTab(item as Tab)}
+              className={`whitespace-nowrap rounded-full px-5 py-2 text-sm capitalize ${
+                tab === item ? "bg-black text-white" : "text-gray-500"
+              }`}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+
+        {tab === "wallet" && (
+          <>
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+
+              <h1 className="text-5xl font-bold">₱0.00</h1>
+
+              <p className="mt-1 text-gray-500">
+                Wallet balance{" "}
+                <span className="font-bold text-emerald-600">
+                  Auto cash in
+                </span>
+              </p>
+
+              <div className="mt-6 grid grid-cols-2 gap-3">
+
+                <button
+                  onClick={() => router.push("/asira-wallet/cash-in")}
+                  className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700"
+                >
+                  ↙ Cash in
+                </button>
+
+                <button
+                  onClick={() => router.push("/asira-wallet/send-money")}
+                  className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700"
+                >
+                  ↗ Send
+                </button>
+
+              </div>
+            </div>
+
+            <div className="mt-6 grid grid-cols-4 gap-4 text-center text-sm">
+
+              {[
+                { label: "Bank transfer", icon: "🏦" },
+                { label: "Raffle Promo", icon: "🎟️" },
+                { label: "Crypto", icon: "◆" },
+                { label: "Refer & Earn", icon: "🧍‍♀️💸" },
+                { label: "Load", icon: "📱" },
+                { label: "Bills", icon: "🧾" },
+                { label: "Shop", icon: "🛍️" },
+                { label: "More", icon: "M" },
+              ].map((item) => (
+                <button
+                  key={item.label}
+                  onClick={() => {
+                    const routes: Record<string, string> = {
+                      "Bank transfer": "/asira-wallet/bank-transfer",
+                      "Raffle Promo": "/asira-wallet/raffle-promo",
+                      Crypto: "/asira-wallet/crypto",
+                      "Refer & Earn": "/asira-wallet/refer-earn",
+                      Load: "/asira-wallet/load",
+                      Bills: "/asira-wallet/bills",
+                      Shop: "/asira-wallet/shop",
+                      More: "/asira-wallet/more",
+                    };
+
+                    router.push(routes[item.label]);
+                  }}
+                  className="text-center"
+                >
+                  <div className="mb-2 flex h-20 items-center justify-center rounded-3xl bg-white text-3xl font-black shadow-sm">
+                    {item.icon}
+                  </div>
+
+                  <p className="leading-tight text-gray-500">
+                    {item.label}
+                  </p>
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-8 rounded-3xl bg-white p-5 shadow-sm">
+
+              <div className="mb-5 flex items-center justify-between">
+
+                <h2 className="text-3xl font-bold">
+                  Transactions
+                </h2>
+
+                <button
+                  onClick={() => router.push("/asira-wallet/history")}
+                  className="font-bold text-emerald-600"
+                >
+                  See all
+                </button>
+
+              </div>
+
+              <div className="rounded-2xl bg-gray-100 p-5 text-center text-gray-500">
+                No transactions yet
+              </div>
+
+            </div>
+          </>
+        )}
+
+        {tab === "savings" && (
+          <>
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+
+              <h1 className="text-5xl font-bold">₱0.00</h1>
+
+              <p className="mt-1 text-gray-500">
+                Total savings
+              </p>
+
+              <p className="mt-5 text-sm text-gray-500">
+                Savings Account Number
+              </p>
+
+              <p className="font-bold">
+                {savingsAccount}
+              </p>
+
+              <div className="mt-6 grid grid-cols-2 gap-3">
+
+                <button className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700">
+                  ↙ Deposit
+                </button>
+
+                <button className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700">
+                  ↗ Transfer
+                </button>
+
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-3xl bg-emerald-600 p-5 text-white">
+
+              <p className="text-sm">
+                ASIRA SAVINGS
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold">
+                My Savings ›
+              </h2>
+
+              <p className="mt-3">
+                Grow your savings safely with Asira Wallet.
+              </p>
+
+            </div>
+          </>
+        )}
+
+        {tab === "credit" && (
+          <>
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+
+              <h1 className="text-5xl font-bold">
+                ₱0.00
+              </h1>
+
+              <p className="mt-1 text-gray-500">
+                Available credit
+              </p>
+
+              <div className="mt-6 h-1 rounded-full bg-emerald-500"></div>
+
+              <button className="mt-6 w-full rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700">
+                Transfer to wallet
+              </button>
+
+            </div>
+
+            <div className="mt-6 rounded-3xl bg-white p-5 shadow-sm">
+
+              <div className="flex items-start justify-between">
+
+                <h2 className="text-3xl font-bold">
+                  Outstanding balance
+                </h2>
+
+                <p className="text-2xl font-bold">
+                  ₱0.00
+                </p>
+
+              </div>
+
+              <p className="mt-3 text-gray-500">
+                No unpaid balance.
+              </p>
+
+              <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
+                Pay now
+              </button>
+
+            </div>
+          </>
+        )}
+
+        {tab === "loans" && (
+          <>
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+
+              <h1 className="text-3xl font-bold">
+                Asira Loans
+              </h1>
+
+              <p className="mt-3 text-gray-500">
+                Check your loan eligibility and status.
+              </p>
+
+              <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
+                Apply now
+              </button>
+
+            </div>
+          </>
+        )}
+
+        {tab === "cards" && (
+          <>
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+
+              <h1 className="text-3xl font-bold">
+                Asira Card
+              </h1>
+
+              <p className="mt-3 text-gray-500">
+                Your virtual card will appear here.
+              </p>
+
+              <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
+                Activate card
+              </button>
+
+            </div>
+          </>
+        )}
+
+        {showQr && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6">
+
+            <div className="w-full max-w-sm rounded-3xl bg-white p-6 text-center">
+
+              <h2 className="mb-4 text-2xl font-bold">
+                QR
+              </h2>
+
+              <div className="mx-auto mb-4 flex h-56 w-56 items-center justify-center rounded-2xl border bg-white p-4">
+
+                <QRCodeCanvas
+                  value="ASIRA-WALLET:AW-CLIENT-0001"
+                  size={190}
+                  level="H"
+                  includeMargin
+                />
+
+              </div>
+
+              <p className="text-sm text-gray-500">
+                Use this QR to receive money.
+              </p>
+
+              <button
+                onClick={() => setShowQr(false)}
+                className="mt-6 w-full rounded-2xl bg-black py-3 font-bold text-white"
+              >
+                Close
+              </button>
+
+            </div>
+          </div>
+        )}
+
+        <div className="fixed bottom-6 left-1/2 flex -translate-x-1/2 gap-10 rounded-3xl bg-black px-10 py-5 text-white shadow-2xl">
 
           <button
-            onClick={handleLogout}
-            className="rounded-xl border border-white/10 px-3 py-2 text-xs text-white/60"
+            onClick={() => setShowQr(true)}
+            className="text-center"
           >
-            Logout
+            <div className="text-2xl">▦</div>
+            <p className="mt-1 text-xs">QR</p>
           </button>
+
+          <button
+            onClick={() => router.push("/asira-wallet/qr-scan")}
+            className="text-center"
+          >
+            <div className="text-2xl">📷</div>
+            <p className="mt-1 text-xs">Scan</p>
+          </button>
+
         </div>
 
-        <div className="px-5">
-          <div className="rounded-3xl bg-gradient-to-br from-emerald-500 to-green-700 p-6 shadow-2xl">
-            <p className="text-white/70 text-sm">Available Balance</p>
-
-            <h2 className="text-5xl font-bold mt-3">
-              ₱{balance.toLocaleString("en-PH", { minimumFractionDigits: 2 })}
-            </h2>
-
-            <div className="mt-5 flex justify-between text-sm">
-              <div>
-                <p className="text-white/60">Wallet ID</p>
-                <p className="font-semibold">{wallet.wallet_id}</p>
-              </div>
-
-              <div className="text-right">
-                <p className="text-white/60">Status</p>
-                <p className="font-semibold">VERIFIED</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="px-5 mt-8">
-          <h2 className="text-lg font-bold mb-4">Quick Actions</h2>
-
-          <div className="grid grid-cols-3 gap-4">
-            {actions.map((item) => (
-              <a
-                key={item.title}
-                href={item.href}
-                className="rounded-3xl bg-white/5 border border-white/10 p-5 flex flex-col items-center justify-center hover:bg-white/10 transition"
-              >
-                <div className="text-3xl">{item.icon}</div>
-                <p className="text-sm mt-3 text-center">{item.title}</p>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="px-5 mt-8">
-          <h2 className="text-lg font-bold mb-4">Recent Transactions</h2>
-
-          <div className="rounded-2xl bg-white/5 border border-white/10 p-4 flex justify-between">
-            <div>
-              <p className="font-semibold">Wallet Active</p>
-              <p className="text-white/40 text-sm">{wallet.wallet_id}</p>
-            </div>
-
-            <div className="text-right">
-              <p className="font-bold">₱0.00</p>
-              <p className="text-xs mt-1 text-emerald-400">READY</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/10">
-          <div className="max-w-md mx-auto grid grid-cols-4 py-3">
-            <NavItem icon="🏠" label="Home" href="/asira-wallet/dashboard" />
-            <NavItem icon="📱" label="QR" href="/asira-wallet/qr" />
-            <NavItem icon="💸" label="Send" href="/asira-wallet/send" />
-            <NavItem icon="⚙️" label="Settings" href="/asira-wallet/settings" />
-          </div>
-        </div>
       </div>
     </main>
-  );
-}
-
-function NavItem({
-  icon,
-  label,
-  href,
-}: {
-  icon: string;
-  label: string;
-  href: string;
-}) {
-  return (
-    <a href={href} className="flex flex-col items-center text-white/70 text-xs">
-      <div className="text-xl">{icon}</div>
-      <p className="mt-1">{label}</p>
-    </a>
   );
 }
