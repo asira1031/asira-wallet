@@ -20,11 +20,13 @@ export default function AsiraWalletSignupPage() {
 
     if (!fullName || !mobile || !birthday || !birthPlace || !pin) {
       setMessage("Please complete all fields.");
+      alert("Please complete all fields.");
       return;
     }
 
     if (pin.length !== 6) {
       setMessage("PIN must be 6 digits.");
+      alert("PIN must be 6 digits.");
       return;
     }
 
@@ -48,6 +50,8 @@ export default function AsiraWalletSignupPage() {
       const data = await res.json();
 
       if (!res.ok) {
+        console.log(data);
+        alert(JSON.stringify(data));
         setMessage(data?.message || "Signup failed.");
         return;
       }
@@ -59,6 +63,8 @@ export default function AsiraWalletSignupPage() {
 
       router.push("/asira-wallet/dashboard");
     } catch (error) {
+      console.log(error);
+      alert("Signup error. Please try again.");
       setMessage("Signup error. Please try again.");
     } finally {
       setLoading(false);
@@ -83,7 +89,9 @@ export default function AsiraWalletSignupPage() {
           onChange={(e) => setFullName(e.target.value)}
         />
 
-        <label className="mb-2 block text-sm text-white/60">Phone Number</label>
+        <label className="mb-2 block text-sm text-white/60">
+          Phone Number
+        </label>
         <input
           className="mb-5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none"
           placeholder="09XXXXXXXXX"
