@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type WalletTransaction = {
@@ -21,6 +21,15 @@ export default function SendMoneyPage() {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const [message, setMessage] = useState("");
+  const [balance, setBalance] = useState(0);
+
+  useEffect(() => {
+    const currentBalance = Number(
+      localStorage.getItem("asira_wallet_balance") || "0"
+    );
+
+    setBalance(currentBalance);
+  }, []);
 
   function handleContinue(e: React.FormEvent) {
     e.preventDefault();
@@ -31,10 +40,21 @@ export default function SendMoneyPage() {
       return;
     }
 
+    const sendAmount = Number(amount);
+
+    if (sendAmount > balance) {
+      setMessage("Insufficient wallet balance.");
+      return;
+    }
+
+    const updatedBalance = balance - sendAmount;
+
+    localStorage.setItem("asira_wallet_balance", updatedBalance.toString());
+
     const transaction: WalletTransaction = {
       id: `AW-SEND-${Date.now()}`,
       type: "Send Money",
-      amount: Number(amount),
+      amount: sendAmount,
       method: "Wallet Transfer",
       status: "Completed",
       recipient,
@@ -52,7 +72,7 @@ export default function SendMoneyPage() {
       JSON.stringify([transaction, ...transactions])
     );
 
-    alert(`Money sent: ₱${amount} to ${recipient}`);
+    alert(`Money sent: ₱${sendAmount.toLocaleString()} to ${recipient}`);
     router.push("/asira-wallet/dashboard");
   }
 
@@ -69,6 +89,13 @@ export default function SendMoneyPage() {
           </button>
 
           <h1 className="text-xl font-semibold">Send money</h1>
+        </div>
+
+        <div className="mb-6 rounded-3xl bg-emerald-50 p-5">
+          <p className="text-sm text-gray-500">Available Balance</p>
+          <h2 className="mt-1 text-3xl font-bold">
+            ₱{balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+          </h2>
         </div>
 
         <p className="mb-4 text-sm font-semibold tracking-widest text-gray-500">
@@ -111,8 +138,7 @@ export default function SendMoneyPage() {
         </div>
 
         <p className="mb-4 px-4 text-sm text-gray-500">
-          Demo wallet transfer. Real balance validation will activate in
-          production.
+          Send money using your Asira Wallet balance.
         </p>
 
         <div className="mb-6 rounded-2xl bg-gray-100 px-4 py-3">

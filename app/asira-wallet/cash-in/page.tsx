@@ -25,12 +25,20 @@ export default function CashInPage() {
       return;
     }
 
+    const currentBalance = Number(
+      localStorage.getItem("asira_wallet_balance") || "0"
+    );
+
+    const updatedBalance = currentBalance + Number(amount);
+
+    localStorage.setItem("asira_wallet_balance", updatedBalance.toString());
+
     const transaction: WalletTransaction = {
-      id: `ASIRA-${Date.now()}`,
+      id: `AW-CASHIN-${Date.now()}`,
       type: "Cash In",
       amount: Number(amount),
       method,
-      status: "Pending",
+      status: "Completed",
       createdAt: new Date().toISOString(),
     };
 
@@ -44,7 +52,7 @@ export default function CashInPage() {
       JSON.stringify([transaction, ...transactions])
     );
 
-    alert(`Cash in request created: ₱${amount} via ${method}`);
+    alert(`Cash in successful: ₱${Number(amount).toLocaleString()} via ${method}`);
     router.push("/asira-wallet/dashboard");
   }
 

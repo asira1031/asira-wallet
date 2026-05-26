@@ -22,6 +22,7 @@ export default function AsiraWalletDashboard() {
   const [showQr, setShowQr] = useState(false);
   const [fullName, setFullName] = useState("Asira User");
   const [phone, setPhone] = useState("");
+  const [balance, setBalance] = useState(0);
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
 
   const savingsAccount = "ASIRA-SAV-0000000001";
@@ -36,6 +37,7 @@ export default function AsiraWalletDashboard() {
 
     setFullName(localStorage.getItem("asira_wallet_full_name") || "Asira User");
     setPhone(localStorage.getItem("asira_wallet_phone") || "");
+    setBalance(Number(localStorage.getItem("asira_wallet_balance") || "0"));
 
     const stored = localStorage.getItem("asira_wallet_transactions");
     setTransactions(stored ? JSON.parse(stored) : []);
@@ -91,7 +93,9 @@ export default function AsiraWalletDashboard() {
         {tab === "wallet" && (
           <>
             <div className="rounded-3xl bg-white p-5 shadow-sm">
-              <h1 className="text-5xl font-bold">₱0.00</h1>
+              <h1 className="text-5xl font-bold">
+                ₱{balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              </h1>
 
               <p className="mt-1 text-gray-500">
                 Wallet balance{" "}
@@ -211,79 +215,32 @@ export default function AsiraWalletDashboard() {
               </p>
 
               <p className="font-bold">{savingsAccount}</p>
-
-              <div className="mt-6 grid grid-cols-2 gap-3">
-                <button className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700">
-                  ↙ Deposit
-                </button>
-
-                <button className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700">
-                  ↗ Transfer
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-6 rounded-3xl bg-emerald-600 p-5 text-white">
-              <p className="text-sm">ASIRA SAVINGS</p>
-              <h2 className="mt-3 text-3xl font-bold">My Savings ›</h2>
-              <p className="mt-3">Grow your savings safely with Asira Wallet.</p>
             </div>
           </>
         )}
 
         {tab === "credit" && (
-          <>
-            <div className="rounded-3xl bg-white p-5 shadow-sm">
-              <h1 className="text-5xl font-bold">₱0.00</h1>
-              <p className="mt-1 text-gray-500">Available credit</p>
-
-              <div className="mt-6 h-1 rounded-full bg-emerald-500"></div>
-
-              <button className="mt-6 w-full rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700">
-                Transfer to wallet
-              </button>
-            </div>
-
-            <div className="mt-6 rounded-3xl bg-white p-5 shadow-sm">
-              <div className="flex items-start justify-between">
-                <h2 className="text-3xl font-bold">Outstanding balance</h2>
-                <p className="text-2xl font-bold">₱0.00</p>
-              </div>
-
-              <p className="mt-3 text-gray-500">No unpaid balance.</p>
-
-              <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
-                Pay now
-              </button>
-            </div>
-          </>
+          <div className="rounded-3xl bg-white p-5 shadow-sm">
+            <h1 className="text-5xl font-bold">₱0.00</h1>
+            <p className="mt-1 text-gray-500">Available credit</p>
+          </div>
         )}
 
         {tab === "loans" && (
           <div className="rounded-3xl bg-white p-5 shadow-sm">
             <h1 className="text-3xl font-bold">Asira Loans</h1>
-
             <p className="mt-3 text-gray-500">
               Check your loan eligibility and status.
             </p>
-
-            <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
-              Apply now
-            </button>
           </div>
         )}
 
         {tab === "cards" && (
           <div className="rounded-3xl bg-white p-5 shadow-sm">
             <h1 className="text-3xl font-bold">Asira Card</h1>
-
             <p className="mt-3 text-gray-500">
               Your virtual card will appear here.
             </p>
-
-            <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
-              Activate card
-            </button>
           </div>
         )}
 
