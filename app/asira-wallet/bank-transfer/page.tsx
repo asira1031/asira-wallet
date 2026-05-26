@@ -38,18 +38,12 @@ export default function BankTransferPage() {
   const [amount, setAmount] = useState("");
 
   function handleTransfer() {
-    if (
-      !selectedBank ||
-      !accountName ||
-      !accountNumber ||
-      !amount
-    ) {
+    if (!selectedBank || !accountName || !accountNumber || !amount) {
       alert("Please complete all fields.");
       return;
     }
 
     const transferAmount = Number(amount);
-
     const currentBalance = Number(
       localStorage.getItem("asira_wallet_balance") || "0"
     );
@@ -64,15 +58,13 @@ export default function BankTransferPage() {
       return;
     }
 
+    const reference = `AW-BANK-${Date.now()}`;
     const updatedBalance = currentBalance - transferAmount;
 
-    localStorage.setItem(
-      "asira_wallet_balance",
-      updatedBalance.toString()
-    );
+    localStorage.setItem("asira_wallet_balance", updatedBalance.toString());
 
     const transaction: WalletTransaction = {
-      id: `AW-BANK-${Date.now()}`,
+      id: reference,
       type: "Bank Transfer",
       amount: transferAmount,
       method: selectedBank,
@@ -82,54 +74,38 @@ export default function BankTransferPage() {
       createdAt: new Date().toISOString(),
     };
 
-    const existing = localStorage.getItem(
-      "asira_wallet_transactions"
-    );
-
-    const transactions: WalletTransaction[] = existing
-      ? JSON.parse(existing)
-      : [];
+    const existing = localStorage.getItem("asira_wallet_transactions");
+    const transactions: WalletTransaction[] = existing ? JSON.parse(existing) : [];
 
     localStorage.setItem(
       "asira_wallet_transactions",
       JSON.stringify([transaction, ...transactions])
     );
 
-    alert(
-      `${selectedBank} transfer successful.\n\nRecipient: ${accountName}\nAmount: ₱${transferAmount.toLocaleString()}`
-    );
+    localStorage.setItem("asira_wallet_latest_receipt", JSON.stringify(transaction));
 
-    router.push("/asira-wallet/dashboard");
+    router.push("/asira-wallet/receipt");
   }
 
   return (
     <main className="min-h-screen bg-[#f7f7f7] px-6 py-8 text-black">
       <div className="mx-auto max-w-sm">
-        <button
-          onClick={() => router.back()}
-          className="mb-8 text-3xl"
-        >
+        <button onClick={() => router.back()} className="mb-8 text-3xl">
           ←
         </button>
 
-        <h1 className="mb-2 text-3xl font-bold">
-          Bank Transfer
-        </h1>
+        <h1 className="mb-2 text-3xl font-bold">Bank Transfer</h1>
 
         <p className="mb-8 text-gray-500">
           Send money directly to bank accounts.
         </p>
 
         <div className="rounded-3xl bg-white p-5 shadow-sm">
-          <label className="text-sm text-gray-500">
-            Select Bank
-          </label>
+          <label className="text-sm text-gray-500">Select Bank</label>
 
           <select
             value={selectedBank}
-            onChange={(e) =>
-              setSelectedBank(e.target.value)
-            }
+            onChange={(e) => setSelectedBank(e.target.value)}
             className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-4 outline-none"
           >
             <option value="">Choose bank</option>
@@ -142,47 +118,33 @@ export default function BankTransferPage() {
           </select>
 
           <div className="mt-5">
-            <label className="text-sm text-gray-500">
-              Account Name
-            </label>
+            <label className="text-sm text-gray-500">Account Name</label>
 
             <input
               value={accountName}
-              onChange={(e) =>
-                setAccountName(e.target.value)
-              }
+              onChange={(e) => setAccountName(e.target.value)}
               placeholder="Juan Dela Cruz"
               className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-4 outline-none"
             />
           </div>
 
           <div className="mt-5">
-            <label className="text-sm text-gray-500">
-              Account Number
-            </label>
+            <label className="text-sm text-gray-500">Account Number</label>
 
             <input
               value={accountNumber}
-              onChange={(e) =>
-                setAccountNumber(e.target.value)
-              }
+              onChange={(e) => setAccountNumber(e.target.value)}
               placeholder="0123456789"
               className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-4 outline-none"
             />
           </div>
 
           <div className="mt-5">
-            <label className="text-sm text-gray-500">
-              Amount
-            </label>
+            <label className="text-sm text-gray-500">Amount</label>
 
             <input
               value={amount}
-              onChange={(e) =>
-                setAmount(
-                  e.target.value.replace(/[^0-9.]/g, "")
-                )
-              }
+              onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))}
               placeholder="₱0.00"
               inputMode="decimal"
               className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-4 outline-none"

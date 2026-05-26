@@ -17,14 +17,16 @@ export default function NetworkLoadPage() {
   const router = useRouter();
   const params = useParams();
 
-  const network = String(params.network || "").toUpperCase();
+  const network = String(params.network || "")
+    .replaceAll("-", " ")
+    .toUpperCase();
 
   const [mobile, setMobile] = useState("");
   const [amount, setAmount] = useState("");
 
   function handleBuyLoad() {
     if (!mobile || !amount) {
-      alert("Please enter mobile number and amount.");
+      alert("Please complete all fields.");
       return;
     }
 
@@ -35,7 +37,7 @@ export default function NetworkLoadPage() {
     );
 
     if (loadAmount <= 0) {
-      alert("Please enter valid amount.");
+      alert("Invalid amount.");
       return;
     }
 
@@ -74,11 +76,12 @@ export default function NetworkLoadPage() {
       JSON.stringify([transaction, ...transactions])
     );
 
-    alert(
-      `${network} load successful.\n\nMobile: ${mobile}\nAmount: ₱${loadAmount}`
+    localStorage.setItem(
+      "asira_wallet_latest_receipt",
+      JSON.stringify(transaction)
     );
 
-    router.push("/asira-wallet/dashboard");
+    router.push("/asira-wallet/receipt");
   }
 
   return (
@@ -93,11 +96,11 @@ export default function NetworkLoadPage() {
 
         <div className="rounded-3xl bg-white p-6 shadow-sm">
           <h1 className="text-3xl font-bold">
-            {network} Load
+            {network}
           </h1>
 
           <p className="mt-3 text-gray-500">
-            Buy prepaid load using your Asira Wallet.
+            Buy prepaid mobile load using Asira Wallet.
           </p>
 
           <div className="mt-8">

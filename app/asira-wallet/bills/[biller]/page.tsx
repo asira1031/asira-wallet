@@ -47,12 +47,13 @@ export default function BillerPaymentPage() {
       return;
     }
 
+    const reference = `AW-BILLS-${Date.now()}`;
     const updatedBalance = currentBalance - paymentAmount;
 
     localStorage.setItem("asira_wallet_balance", updatedBalance.toString());
 
     const transaction: WalletTransaction = {
-      id: `AW-BILLS-${Date.now()}`,
+      id: reference,
       type: "Bills Payment",
       amount: paymentAmount,
       method: biller,
@@ -72,11 +73,13 @@ export default function BillerPaymentPage() {
       JSON.stringify([transaction, ...transactions])
     );
 
-    alert(
-      `${biller} bill payment successful.\n\nName: ${accountName}\nAmount: ₱${paymentAmount.toLocaleString()}`
-    );
+    localStorage.setItem("asira_receipt_type", "Bills Payment");
+    localStorage.setItem("asira_receipt_method", biller);
+    localStorage.setItem("asira_receipt_recipient", accountName);
+    localStorage.setItem("asira_receipt_amount", paymentAmount.toString());
+    localStorage.setItem("asira_receipt_reference", reference);
 
-    router.push("/asira-wallet/dashboard");
+    router.push("/asira-wallet/receipt");
   }
 
   return (
@@ -95,7 +98,6 @@ export default function BillerPaymentPage() {
 
           <div className="mt-8">
             <label className="text-sm text-gray-500">Account Name</label>
-
             <input
               value={accountName}
               onChange={(e) => setAccountName(e.target.value)}
@@ -108,7 +110,6 @@ export default function BillerPaymentPage() {
             <label className="text-sm text-gray-500">
               Account / Reference Number
             </label>
-
             <input
               value={accountNumber}
               onChange={(e) => setAccountNumber(e.target.value)}
@@ -119,7 +120,6 @@ export default function BillerPaymentPage() {
 
           <div className="mt-5">
             <label className="text-sm text-gray-500">Amount</label>
-
             <input
               value={amount}
               onChange={(e) =>
