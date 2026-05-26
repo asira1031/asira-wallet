@@ -14,14 +14,14 @@ export async function POST(req: Request) {
       );
     }
 
-    if (pin.length !== 6) {
+    if (String(pin).length !== 6) {
       return NextResponse.json(
         { message: "PIN must be 6 digits." },
         { status: 400 }
       );
     }
 
-    const walletId = "AW-" + Date.now();
+    const walletId = `AW-${Date.now()}`;
 
     const { data, error } = await supabase
       .from("wallet_users")
@@ -50,12 +50,10 @@ export async function POST(req: Request) {
       success: true,
       user: data,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { message: "Server error." },
       { status: 500 }
     );
   }
-}git add .
-git commit -m "Update wallet signup API for birth details"
-git push origin main
+}
