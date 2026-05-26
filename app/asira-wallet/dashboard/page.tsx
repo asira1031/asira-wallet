@@ -6,6 +6,15 @@ import { QRCodeCanvas } from "qrcode.react";
 
 type Tab = "wallet" | "savings" | "credit" | "loans" | "cards";
 
+type WalletTransaction = {
+  id: string;
+  type: string;
+  amount: number;
+  method: string;
+  status: string;
+  createdAt: string;
+};
+
 export default function AsiraWalletDashboard() {
   const router = useRouter();
 
@@ -13,6 +22,7 @@ export default function AsiraWalletDashboard() {
   const [showQr, setShowQr] = useState(false);
   const [fullName, setFullName] = useState("Asira User");
   const [phone, setPhone] = useState("");
+  const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
 
   const savingsAccount = "ASIRA-SAV-0000000001";
 
@@ -26,6 +36,9 @@ export default function AsiraWalletDashboard() {
 
     setFullName(localStorage.getItem("asira_wallet_full_name") || "Asira User");
     setPhone(localStorage.getItem("asira_wallet_phone") || "");
+
+    const stored = localStorage.getItem("asira_wallet_transactions");
+    setTransactions(stored ? JSON.parse(stored) : []);
   }, [router]);
 
   function handleLogout() {
@@ -154,8 +167,34 @@ export default function AsiraWalletDashboard() {
                 </button>
               </div>
 
-              <div className="rounded-2xl bg-gray-100 p-5 text-center text-gray-500">
-                No transactions yet
+              <div className="space-y-3">
+                {transactions.length === 0 ? (
+                  <div className="rounded-2xl bg-gray-100 p-5 text-center text-gray-500">
+                    No transactions yet
+                  </div>
+                ) : (
+                  transactions.slice(0, 3).map((tx) => (
+                    <div
+                      key={tx.id}
+                      className="flex items-center justify-between rounded-2xl bg-gray-100 p-4"
+                    >
+                      <div>
+                        <p className="font-bold">{tx.type}</p>
+                        <p className="text-sm text-gray-500">{tx.method}</p>
+                        <p className="text-xs text-gray-400">
+                          {new Date(tx.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+
+                      <div className="text-right">
+                        <p className="font-bold">
+                          ₱{Number(tx.amount).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-emerald-600">{tx.status}</p>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </>

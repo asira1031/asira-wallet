@@ -1,71 +1,89 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+type WalletTransaction = {
+  id: string;
+  type: string;
+  amount: number;
+  method: string;
+  status: string;
+  createdAt: string;
+};
+
 export default function HistoryPage() {
-  const transactions = [
-    {
-      title: "Send Money",
-      reference: "AW-SEND-1779680722922",
-      amount: "₱100.00",
-      status: "COMPLETED",
-      description: "Sent to AW-CLIENT-0002",
-      date: "5/25/2026, 11:45:21 AM",
-    },
-    {
-      title: "Cash In",
-      reference: "AW-CASHIN-1779677021882",
-      amount: "₱999.00",
-      status: "COMPLETED",
-      description: "Cash in via GCash",
-      date: "5/25/2026, 10:43:41 AM",
-    },
-  ];
+  const router = useRouter();
+
+  const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("asira_wallet_transactions");
+
+    setTransactions(stored ? JSON.parse(stored) : []);
+  }, []);
 
   return (
-    <main className="min-h-screen bg-black text-white p-6">
-      <div className="max-w-md mx-auto">
+    <main className="min-h-screen bg-black p-6 text-white">
+      <div className="mx-auto max-w-md">
+        <button
+          onClick={() => router.back()}
+          className="mb-8 text-3xl"
+        >
+          ←
+        </button>
+
         <h1 className="text-3xl font-bold">
           Transaction History
         </h1>
 
-        <p className="text-white/40 mt-2">
+        <p className="mt-2 text-white/40">
           Wallet activity and transfers
         </p>
 
         <div className="mt-8 space-y-4">
-          {transactions.map((tx) => (
-            <div
-              key={tx.reference}
-              className="rounded-3xl bg-white/5 border border-white/10 p-5"
-            >
-              <div className="flex justify-between">
-                <div>
-                  <h2 className="font-bold text-lg">
-                    {tx.title}
-                  </h2>
-
-                  <p className="text-white/40 text-sm mt-1">
-                    {tx.reference}
-                  </p>
-                </div>
-
-                <div className="text-right">
-                  <p className="font-bold text-lg">
-                    {tx.amount}
-                  </p>
-
-                  <p className="text-sm mt-1 text-emerald-400">
-                    {tx.status}
-                  </p>
-                </div>
-              </div>
-
-              <p className="text-white/50 text-sm mt-4">
-                {tx.description}
-              </p>
-
-              <p className="text-white/30 text-xs mt-2">
-                {tx.date}
-              </p>
+          {transactions.length === 0 ? (
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-center text-white/40">
+              No transaction history yet.
             </div>
-          ))}
+          ) : (
+            transactions.map((tx) => (
+              <div
+                key={tx.id}
+                className="rounded-3xl border border-white/10 bg-white/5 p-5"
+              >
+                <div className="flex justify-between">
+                  <div>
+                    <h2 className="text-lg font-bold">
+                      {tx.type}
+                    </h2>
+
+                    <p className="mt-1 text-sm text-white/40">
+                      {tx.id}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="text-lg font-bold">
+                      ₱{Number(tx.amount).toLocaleString()}
+                    </p>
+
+                    <p className="mt-1 text-sm text-emerald-400">
+                      {tx.status}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="mt-4 text-sm text-white/50">
+                  via {tx.method}
+                </p>
+
+                <p className="mt-2 text-xs text-white/30">
+                  {new Date(tx.createdAt).toLocaleString()}
+                </p>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </main>
