@@ -3,6 +3,17 @@
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
+type WalletTransaction = {
+  id: string;
+  type: string;
+  amount: number;
+  method: string;
+  status: string;
+  createdAt: string;
+  recipient?: string;
+  note?: string;
+};
+
 export default function BillerPaymentPage() {
   const router = useRouter();
   const params = useParams();
@@ -21,8 +32,48 @@ export default function BillerPaymentPage() {
       return;
     }
 
+    const paymentAmount = Number(amount);
+    const currentBalance = Number(
+      localStorage.getItem("asira_wallet_balance") || "0"
+    );
+
+    if (paymentAmount <= 0) {
+      alert("Please enter a valid amount.");
+      return;
+    }
+
+    if (paymentAmount > currentBalance) {
+      alert("Insufficient wallet balance.");
+      return;
+    }
+
+    const updatedBalance = currentBalance - paymentAmount;
+
+    localStorage.setItem("asira_wallet_balance", updatedBalance.toString());
+
+    const transaction: WalletTransaction = {
+      id: `AW-BILLS-${Date.now()}`,
+      type: "Bills Payment",
+      amount: paymentAmount,
+      method: biller,
+      status: "Completed",
+      recipient: accountName,
+      note: accountNumber,
+      createdAt: new Date().toISOString(),
+    };
+
+    const existing = localStorage.getItem("asira_wallet_transactions");
+    const transactions: WalletTransaction[] = existing
+      ? JSON.parse(existing)
+      : [];
+
+    localStorage.setItem(
+      "asira_wallet_transactions",
+      JSON.stringify([transaction, ...transactions])
+    );
+
     alert(
-      `${biller} bill payment successful.\n\nName: ${accountName}\nAmount: ₱${amount}`
+      `${biller} bill payment successful.\n\nName: ${accountName}\nAmount: ₱${paymentAmount.toLocaleString()}`
     );
 
     router.push("/asira-wallet/dashboard");
@@ -31,10 +82,7 @@ export default function BillerPaymentPage() {
   return (
     <main className="min-h-screen bg-[#f5f5f5] px-5 py-6 text-black">
       <div className="mx-auto max-w-sm">
-        <button
-          onClick={() => router.back()}
-          className="mb-6 text-3xl"
-        >
+        <button onClick={() => router.back()} className="mb-6 text-3xl">
           ←
         </button>
 
@@ -46,9 +94,7 @@ export default function BillerPaymentPage() {
           </p>
 
           <div className="mt-8">
-            <label className="text-sm text-gray-500">
-              Account Name
-            </label>
+            <label className="text-sm text-gray-500">Account Name</label>
 
             <input
               value={accountName}
@@ -72,16 +118,12 @@ export default function BillerPaymentPage() {
           </div>
 
           <div className="mt-5">
-            <label className="text-sm text-gray-500">
-              Amount
-            </label>
+            <label className="text-sm text-gray-500">Amount</label>
 
             <input
               value={amount}
               onChange={(e) =>
-                setAmount(
-                  e.target.value.replace(/[^0-9.]/g, "")
-                )
+                setAmount(e.target.value.replace(/[^0-9.]/g, ""))
               }
               placeholder="₱0.00"
               inputMode="decimal"
