@@ -11,6 +11,8 @@ export default function AsiraWalletDashboard() {
 
   const [tab, setTab] = useState<Tab>("wallet");
   const [showQr, setShowQr] = useState(false);
+  const [fullName, setFullName] = useState("Asira User");
+  const [phone, setPhone] = useState("");
 
   const savingsAccount = "ASIRA-SAV-0000000001";
 
@@ -19,12 +21,18 @@ export default function AsiraWalletDashboard() {
 
     if (loggedIn !== "yes") {
       router.push("/asira-wallet/login");
+      return;
     }
+
+    setFullName(localStorage.getItem("asira_wallet_full_name") || "Asira User");
+    setPhone(localStorage.getItem("asira_wallet_phone") || "");
   }, [router]);
 
   function handleLogout() {
     localStorage.removeItem("asira_wallet_logged_in");
     localStorage.removeItem("asira_wallet_phone");
+    localStorage.removeItem("asira_wallet_full_name");
+    localStorage.removeItem("asira_wallet_email");
 
     router.push("/asira-wallet/login");
   }
@@ -32,27 +40,25 @@ export default function AsiraWalletDashboard() {
   return (
     <main className="min-h-screen bg-[#f7f7f7] px-4 py-6 text-black">
       <div className="mx-auto max-w-sm pb-32">
-
         <div className="mb-8 flex items-center justify-between">
-
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
-            👤
-          </div>
-
-          <div className="flex items-center gap-4">
-
-            <button
-              onClick={handleLogout}
-              className="rounded-full bg-red-500 px-4 py-2 text-xs font-bold text-white"
-            >
-              Logout
-            </button>
-
-            <div className="rounded-full bg-emerald-700 px-4 py-2 text-sm font-bold text-white">
-              0 XP
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-lg font-black text-emerald-700">
+              {fullName.charAt(0).toUpperCase()}
             </div>
 
+            <div>
+              <p className="text-sm text-gray-500">Welcome back</p>
+              <h2 className="text-lg font-bold">{fullName}</h2>
+              {phone && <p className="text-xs text-gray-400">{phone}</p>}
+            </div>
           </div>
+
+          <button
+            onClick={handleLogout}
+            className="rounded-full bg-red-500 px-4 py-2 text-xs font-bold text-white"
+          >
+            Logout
+          </button>
         </div>
 
         <div className="mb-6 flex gap-3 overflow-x-auto">
@@ -72,7 +78,6 @@ export default function AsiraWalletDashboard() {
         {tab === "wallet" && (
           <>
             <div className="rounded-3xl bg-white p-5 shadow-sm">
-
               <h1 className="text-5xl font-bold">₱0.00</h1>
 
               <p className="mt-1 text-gray-500">
@@ -83,7 +88,6 @@ export default function AsiraWalletDashboard() {
               </p>
 
               <div className="mt-6 grid grid-cols-2 gap-3">
-
                 <button
                   onClick={() => router.push("/asira-wallet/cash-in")}
                   className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700"
@@ -97,12 +101,10 @@ export default function AsiraWalletDashboard() {
                 >
                   ↗ Send
                 </button>
-
               </div>
             </div>
 
             <div className="mt-6 grid grid-cols-4 gap-4 text-center text-sm">
-
               {[
                 { label: "Bank transfer", icon: "🏦" },
                 { label: "Raffle Promo", icon: "🎟️" },
@@ -135,20 +137,14 @@ export default function AsiraWalletDashboard() {
                     {item.icon}
                   </div>
 
-                  <p className="leading-tight text-gray-500">
-                    {item.label}
-                  </p>
+                  <p className="leading-tight text-gray-500">{item.label}</p>
                 </button>
               ))}
             </div>
 
             <div className="mt-8 rounded-3xl bg-white p-5 shadow-sm">
-
               <div className="mb-5 flex items-center justify-between">
-
-                <h2 className="text-3xl font-bold">
-                  Transactions
-                </h2>
+                <h2 className="text-3xl font-bold">Transactions</h2>
 
                 <button
                   onClick={() => router.push("/asira-wallet/history")}
@@ -156,13 +152,11 @@ export default function AsiraWalletDashboard() {
                 >
                   See all
                 </button>
-
               </div>
 
               <div className="rounded-2xl bg-gray-100 p-5 text-center text-gray-500">
                 No transactions yet
               </div>
-
             </div>
           </>
         )}
@@ -170,23 +164,16 @@ export default function AsiraWalletDashboard() {
         {tab === "savings" && (
           <>
             <div className="rounded-3xl bg-white p-5 shadow-sm">
-
               <h1 className="text-5xl font-bold">₱0.00</h1>
-
-              <p className="mt-1 text-gray-500">
-                Total savings
-              </p>
+              <p className="mt-1 text-gray-500">Total savings</p>
 
               <p className="mt-5 text-sm text-gray-500">
                 Savings Account Number
               </p>
 
-              <p className="font-bold">
-                {savingsAccount}
-              </p>
+              <p className="font-bold">{savingsAccount}</p>
 
               <div className="mt-6 grid grid-cols-2 gap-3">
-
                 <button className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700">
                   ↙ Deposit
                 </button>
@@ -194,24 +181,13 @@ export default function AsiraWalletDashboard() {
                 <button className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700">
                   ↗ Transfer
                 </button>
-
               </div>
             </div>
 
             <div className="mt-6 rounded-3xl bg-emerald-600 p-5 text-white">
-
-              <p className="text-sm">
-                ASIRA SAVINGS
-              </p>
-
-              <h2 className="mt-3 text-3xl font-bold">
-                My Savings ›
-              </h2>
-
-              <p className="mt-3">
-                Grow your savings safely with Asira Wallet.
-              </p>
-
+              <p className="text-sm">ASIRA SAVINGS</p>
+              <h2 className="mt-3 text-3xl font-bold">My Savings ›</h2>
+              <p className="mt-3">Grow your savings safely with Asira Wallet.</p>
             </div>
           </>
         )}
@@ -219,107 +195,71 @@ export default function AsiraWalletDashboard() {
         {tab === "credit" && (
           <>
             <div className="rounded-3xl bg-white p-5 shadow-sm">
-
-              <h1 className="text-5xl font-bold">
-                ₱0.00
-              </h1>
-
-              <p className="mt-1 text-gray-500">
-                Available credit
-              </p>
+              <h1 className="text-5xl font-bold">₱0.00</h1>
+              <p className="mt-1 text-gray-500">Available credit</p>
 
               <div className="mt-6 h-1 rounded-full bg-emerald-500"></div>
 
               <button className="mt-6 w-full rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700">
                 Transfer to wallet
               </button>
-
             </div>
 
             <div className="mt-6 rounded-3xl bg-white p-5 shadow-sm">
-
               <div className="flex items-start justify-between">
-
-                <h2 className="text-3xl font-bold">
-                  Outstanding balance
-                </h2>
-
-                <p className="text-2xl font-bold">
-                  ₱0.00
-                </p>
-
+                <h2 className="text-3xl font-bold">Outstanding balance</h2>
+                <p className="text-2xl font-bold">₱0.00</p>
               </div>
 
-              <p className="mt-3 text-gray-500">
-                No unpaid balance.
-              </p>
+              <p className="mt-3 text-gray-500">No unpaid balance.</p>
 
               <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
                 Pay now
               </button>
-
             </div>
           </>
         )}
 
         {tab === "loans" && (
-          <>
-            <div className="rounded-3xl bg-white p-5 shadow-sm">
+          <div className="rounded-3xl bg-white p-5 shadow-sm">
+            <h1 className="text-3xl font-bold">Asira Loans</h1>
 
-              <h1 className="text-3xl font-bold">
-                Asira Loans
-              </h1>
+            <p className="mt-3 text-gray-500">
+              Check your loan eligibility and status.
+            </p>
 
-              <p className="mt-3 text-gray-500">
-                Check your loan eligibility and status.
-              </p>
-
-              <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
-                Apply now
-              </button>
-
-            </div>
-          </>
+            <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
+              Apply now
+            </button>
+          </div>
         )}
 
         {tab === "cards" && (
-          <>
-            <div className="rounded-3xl bg-white p-5 shadow-sm">
+          <div className="rounded-3xl bg-white p-5 shadow-sm">
+            <h1 className="text-3xl font-bold">Asira Card</h1>
 
-              <h1 className="text-3xl font-bold">
-                Asira Card
-              </h1>
+            <p className="mt-3 text-gray-500">
+              Your virtual card will appear here.
+            </p>
 
-              <p className="mt-3 text-gray-500">
-                Your virtual card will appear here.
-              </p>
-
-              <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
-                Activate card
-              </button>
-
-            </div>
-          </>
+            <button className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white">
+              Activate card
+            </button>
+          </div>
         )}
 
         {showQr && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6">
-
             <div className="w-full max-w-sm rounded-3xl bg-white p-6 text-center">
-
-              <h2 className="mb-4 text-2xl font-bold">
-                QR
-              </h2>
+              <h2 className="mb-4 text-2xl font-bold">QR</h2>
 
               <div className="mx-auto mb-4 flex h-56 w-56 items-center justify-center rounded-2xl border bg-white p-4">
-
                 <QRCodeCanvas
-                  value="ASIRA-WALLET:AW-CLIENT-0001"
+                  value={`ASIRA-WALLET:${phone || "AW-CLIENT-0001"}`}
                   size={190}
                   level="H"
                   includeMargin
                 />
-
               </div>
 
               <p className="text-sm text-gray-500">
@@ -332,17 +272,12 @@ export default function AsiraWalletDashboard() {
               >
                 Close
               </button>
-
             </div>
           </div>
         )}
 
         <div className="fixed bottom-6 left-1/2 flex -translate-x-1/2 gap-10 rounded-3xl bg-black px-10 py-5 text-white shadow-2xl">
-
-          <button
-            onClick={() => setShowQr(true)}
-            className="text-center"
-          >
+          <button onClick={() => setShowQr(true)} className="text-center">
             <div className="text-2xl">▦</div>
             <p className="mt-1 text-xs">QR</p>
           </button>
@@ -354,9 +289,7 @@ export default function AsiraWalletDashboard() {
             <div className="text-2xl">📷</div>
             <p className="mt-1 text-xs">Scan</p>
           </button>
-
         </div>
-
       </div>
     </main>
   );
