@@ -7,25 +7,34 @@ export default function BillerPaymentPage() {
   const router = useRouter();
   const params = useParams();
 
-  const biller = String(params.biller || "").toUpperCase();
+  const biller = String(params.biller || "")
+    .replaceAll("-", " ")
+    .toUpperCase();
 
+  const [accountName, setAccountName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [amount, setAmount] = useState("");
 
   function handlePayBill() {
-    if (!accountNumber || !amount) {
-      alert("Please enter account number and amount.");
+    if (!accountName || !accountNumber || !amount) {
+      alert("Please complete all fields.");
       return;
     }
 
-    alert(`${biller} bill payment created: ₱${amount}`);
+    alert(
+      `${biller} bill payment successful.\n\nName: ${accountName}\nAmount: ₱${amount}`
+    );
+
     router.push("/asira-wallet/dashboard");
   }
 
   return (
     <main className="min-h-screen bg-[#f5f5f5] px-5 py-6 text-black">
       <div className="mx-auto max-w-sm">
-        <button onClick={() => router.back()} className="mb-6 text-3xl">
+        <button
+          onClick={() => router.back()}
+          className="mb-6 text-3xl"
+        >
           ←
         </button>
 
@@ -38,8 +47,22 @@ export default function BillerPaymentPage() {
 
           <div className="mt-8">
             <label className="text-sm text-gray-500">
+              Account Name
+            </label>
+
+            <input
+              value={accountName}
+              onChange={(e) => setAccountName(e.target.value)}
+              placeholder="Juan Dela Cruz"
+              className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-4 outline-none"
+            />
+          </div>
+
+          <div className="mt-5">
+            <label className="text-sm text-gray-500">
               Account / Reference Number
             </label>
+
             <input
               value={accountNumber}
               onChange={(e) => setAccountNumber(e.target.value)}
@@ -49,10 +72,17 @@ export default function BillerPaymentPage() {
           </div>
 
           <div className="mt-5">
-            <label className="text-sm text-gray-500">Amount</label>
+            <label className="text-sm text-gray-500">
+              Amount
+            </label>
+
             <input
               value={amount}
-              onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))}
+              onChange={(e) =>
+                setAmount(
+                  e.target.value.replace(/[^0-9.]/g, "")
+                )
+              }
               placeholder="₱0.00"
               inputMode="decimal"
               className="mt-2 w-full rounded-2xl bg-gray-100 px-4 py-4 outline-none"
