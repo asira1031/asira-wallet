@@ -31,7 +31,7 @@ export async function POST(req: Request) {
           mobile,
           birthday,
           birth_place: birthPlace,
-          pin,
+          pin_code: pin,
           balance: 0,
           wallet_id: walletId,
         },
