@@ -1,8 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+type WalletTransaction = {
+  id: string;
+  type: string;
+  amount: number;
+  method: string;
+  status: string;
+  createdAt: string;
+  recipient?: string;
+  note?: string;
+};
 
 export default function SendMoneyPage() {
+  const router = useRouter();
+
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
@@ -10,20 +24,50 @@ export default function SendMoneyPage() {
 
   function handleContinue(e: React.FormEvent) {
     e.preventDefault();
+    setMessage("");
 
-    if (!recipient || !amount) {
-      setMessage("Please enter recipient and amount.");
+    if (!recipient || !amount || Number(amount) <= 0) {
+      setMessage("Please enter recipient and valid amount.");
       return;
     }
 
-    setMessage("✅ Send money request created.");
+    const transaction: WalletTransaction = {
+      id: `AW-SEND-${Date.now()}`,
+      type: "Send Money",
+      amount: Number(amount),
+      method: "Wallet Transfer",
+      status: "Completed",
+      recipient,
+      note,
+      createdAt: new Date().toISOString(),
+    };
+
+    const existing = localStorage.getItem("asira_wallet_transactions");
+    const transactions: WalletTransaction[] = existing
+      ? JSON.parse(existing)
+      : [];
+
+    localStorage.setItem(
+      "asira_wallet_transactions",
+      JSON.stringify([transaction, ...transactions])
+    );
+
+    alert(`Money sent: ₱${amount} to ${recipient}`);
+    router.push("/asira-wallet/dashboard");
   }
 
   return (
-    <main className="min-h-screen bg-white text-black px-6 py-8">
+    <main className="min-h-screen bg-white px-6 py-8 text-black">
       <form onSubmit={handleContinue} className="mx-auto max-w-sm">
         <div className="mb-8 flex items-center gap-4">
-          <button type="button" className="text-3xl">←</button>
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="text-3xl"
+          >
+            ←
+          </button>
+
           <h1 className="text-xl font-semibold">Send money</h1>
         </div>
 
@@ -32,18 +76,21 @@ export default function SendMoneyPage() {
         </p>
 
         <div className="mb-8 rounded-2xl border border-dashed border-gray-300 px-5 py-4 text-gray-500">
-          Complete a transaction<br />to add it to your favorites
+          Complete a transaction
+          <br />
+          to add it to your favorites
         </div>
 
         <div className="mb-4 rounded-2xl bg-gray-100 px-4 py-3">
           <label className="block text-sm font-semibold text-emerald-600">
             Recipient
           </label>
+
           <input
             value={recipient}
             onChange={(e) => setRecipient(e.target.value)}
             className="w-full bg-transparent text-lg outline-none"
-            placeholder="ex. Maya, @maya, or 090"
+            placeholder="Mobile number, wallet ID, or name"
           />
         </div>
 
@@ -51,23 +98,28 @@ export default function SendMoneyPage() {
           <label className="block text-sm font-semibold text-emerald-600">
             Amount
           </label>
+
           <input
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) =>
+              setAmount(e.target.value.replace(/[^0-9.]/g, ""))
+            }
             className="w-full bg-transparent text-lg outline-none"
             placeholder="Enter amount"
-            type="number"
+            inputMode="decimal"
           />
         </div>
 
         <p className="mb-4 px-4 text-sm text-gray-500">
-          You have ₱5.30 in your wallet.
+          Demo wallet transfer. Real balance validation will activate in
+          production.
         </p>
 
         <div className="mb-6 rounded-2xl bg-gray-100 px-4 py-3">
           <label className="block text-sm font-semibold text-emerald-600">
             Note (Optional)
           </label>
+
           <input
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -76,7 +128,7 @@ export default function SendMoneyPage() {
           />
         </div>
 
-        {message && <p className="mb-4 text-sm text-emerald-600">{message}</p>}
+        {message && <p className="mb-4 text-sm text-red-600">{message}</p>}
 
         <button className="w-full rounded-2xl bg-emerald-500 py-4 font-bold text-black">
           Continue
