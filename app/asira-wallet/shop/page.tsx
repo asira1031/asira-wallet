@@ -2,27 +2,103 @@
 
 import { useRouter } from "next/navigation";
 
+type Product = {
+  name: string;
+  price: number;
+  merchant: string;
+  icon: string;
+};
+
+const products: Product[] = [
+  { name: "Grocery Voucher", price: 100, merchant: "Asira Market", icon: "🛒" },
+  { name: "Food Voucher", price: 150, merchant: "Food Hub", icon: "🍔" },
+  { name: "Coffee Voucher", price: 120, merchant: "Cafe Partner", icon: "☕" },
+  { name: "Movie Ticket", price: 250, merchant: "Cinema Partner", icon: "🎬" },
+  { name: "Travel Coupon", price: 500, merchant: "Travel Deals", icon: "✈️" },
+  { name: "Gift Card", price: 300, merchant: "Asira Rewards", icon: "🎁" },
+];
+
 export default function ShopPage() {
   const router = useRouter();
+
+  function buyProduct(product: Product) {
+    const currentBalance = Number(
+      localStorage.getItem("asira_wallet_balance") || "0"
+    );
+
+    if (product.price > currentBalance) {
+      alert("Insufficient wallet balance.");
+      return;
+    }
+
+    const reference = `AW-SHOP-${Date.now()}`;
+    const updatedBalance = currentBalance - product.price;
+
+    localStorage.setItem("asira_wallet_balance", updatedBalance.toString());
+
+    const transaction = {
+      id: reference,
+      type: "Shop Purchase",
+      amount: product.price,
+      method: product.merchant,
+      status: "Completed",
+      recipient: product.name,
+      createdAt: new Date().toISOString(),
+    };
+
+    const existing = localStorage.getItem("asira_wallet_transactions");
+    const transactions = existing ? JSON.parse(existing) : [];
+
+    localStorage.setItem(
+      "asira_wallet_transactions",
+      JSON.stringify([transaction, ...transactions])
+    );
+
+    localStorage.setItem("asira_wallet_latest_receipt", JSON.stringify(transaction));
+
+    router.push("/asira-wallet/receipt");
+  }
 
   return (
     <main className="min-h-screen bg-[#f7f7f7] px-6 py-8 text-black">
       <div className="mx-auto max-w-sm">
-        <button
-          onClick={() => router.back()}
-          className="mb-8 text-3xl"
-        >
+        <button onClick={() => router.back()} className="mb-8 text-3xl">
           ←
         </button>
 
         <div className="rounded-3xl bg-white p-6 shadow-sm">
-          <h1 className="text-3xl font-bold">
-            Shop
-          </h1>
+          <h1 className="text-3xl font-bold">Shop</h1>
 
           <p className="mt-3 text-gray-500">
             Discover shopping deals and merchants with Asira Wallet.
           </p>
+
+          <div className="mt-8 space-y-4">
+            {products.map((product) => (
+              <div
+                key={product.name}
+                className="rounded-3xl bg-gray-100 p-5"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="text-4xl">{product.icon}</div>
+
+                  <div className="flex-1">
+                    <h2 className="font-bold">{product.name}</h2>
+                    <p className="text-sm text-gray-500">{product.merchant}</p>
+                  </div>
+
+                  <p className="font-bold">₱{product.price}</p>
+                </div>
+
+                <button
+                  onClick={() => buyProduct(product)}
+                  className="mt-4 w-full rounded-2xl bg-emerald-600 py-3 font-bold text-white"
+                >
+                  Buy Now
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </main>
