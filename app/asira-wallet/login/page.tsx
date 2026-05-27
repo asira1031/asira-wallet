@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AsiraWalletLoginPage() {
+  const router = useRouter();
+
   const [phone, setPhone] = useState("");
   const [pin, setPin] = useState("");
 
@@ -19,8 +22,12 @@ export default function AsiraWalletLoginPage() {
 
     localStorage.setItem("asira_wallet_logged_in", "yes");
     localStorage.setItem("asira_wallet_phone", phone);
+    localStorage.setItem(
+      "asira_wallet_full_name",
+      localStorage.getItem("asira_wallet_full_name") || "Asira User"
+    );
 
-    window.location.href = "/asira-wallet/dashboard";
+    router.push("/asira-wallet/dashboard");
   }
 
   return (
@@ -57,14 +64,16 @@ export default function AsiraWalletLoginPage() {
           </div>
 
           <button
+            type="button"
             onClick={handleLogin}
             className="w-full rounded-2xl bg-green-500 py-4 font-semibold text-black transition-all hover:bg-green-400"
           >
-            Login
+            Continue
           </button>
 
           <div className="grid grid-cols-2 gap-4">
             <button
+              type="button"
               onClick={() => alert("Face ID will activate in production.")}
               className="rounded-2xl border border-white/10 bg-black/30 py-3"
             >
@@ -72,6 +81,7 @@ export default function AsiraWalletLoginPage() {
             </button>
 
             <button
+              type="button"
               onClick={() => alert("Touch ID will activate in production.")}
               className="rounded-2xl border border-white/10 bg-black/30 py-3"
             >
@@ -84,12 +94,13 @@ export default function AsiraWalletLoginPage() {
             integration.
           </div>
 
-          <a
-            href="/asira-wallet/signup"
-            className="block text-center text-sm text-green-400"
+          <button
+            type="button"
+            onClick={() => router.push("/asira-wallet/signup")}
+            className="block w-full text-center text-sm text-green-400"
           >
             Create Wallet Account
-          </a>
+          </button>
         </div>
       </div>
     </main>
