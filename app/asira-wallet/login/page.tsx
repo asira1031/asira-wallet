@@ -78,7 +78,7 @@ export default function AsiraWalletLoginPage() {
          <button
   type="button"
   onClick={handleLogin}
- className="w-full rounded-xl bg-[#245BFF] py-3 font-semibold text-white transition hover:bg-blue-500"
+ className="w-full rounded-xl bg-[#245BFF] py-3 font-semibold text-white transition hover:bg-[#1E3A8A]-500"
 >
   Continue
 </button>
@@ -108,7 +108,7 @@ export default function AsiraWalletLoginPage() {
           <button
             type="button"
             onClick={() => router.push("/asira-wallet/signup")}
-           className="mt-5 w-full text-sm text-blue-400 transition hover:text-blue-300"
+           className="mt-5 w-full text-sm text-[#1E3A8A]-400 transition hover:text-[#1E3A8A]-300"
           >
             Create Wallet Account
           </button>

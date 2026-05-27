@@ -67,7 +67,7 @@ setBalance(Number(savedBalance));
       <div className="mx-auto max-w-sm pb-32">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-lg font-black text-emerald-700">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#DBEAFE]-100 text-lg font-black text-[#1E3A8A]-700">
               {fullName.charAt(0).toUpperCase()}
             </div>
 
@@ -109,7 +109,7 @@ setBalance(Number(savedBalance));
 
               <p className="mt-1 text-gray-500">
                 Wallet balance{" "}
-                <span className="font-bold text-blue-600">
+                <span className="font-bold text-[#1E3A8A]-600">
                   Auto cash in
                 </span>
               </p>
@@ -117,14 +117,14 @@ setBalance(Number(savedBalance));
               <div className="mt-6 grid grid-cols-2 gap-3">
                 <button
                   onClick={() => router.push("/asira-wallet/cash-in")}
-                className="rounded-2xl bg-blue-100 py-4 font-bold text-blue-700"
+                className="rounded-2xl bg-[#DBEAFE]-100 py-4 font-bold text-[#1E3A8A]-700"
                 >
                   ↙ Cash in
                 </button>
 
                 <button
                   onClick={() => router.push("/asira-wallet/send-money")}
-                  className="rounded-2xl bg-blue-100 py-4 font-bold text-blue-700"
+                  className="rounded-2xl bg-[#DBEAFE]-100 py-4 font-bold text-[#1E3A8A]-700"
                 >
                   ↗ Send
                 </button>
@@ -175,7 +175,7 @@ setBalance(Number(savedBalance));
 
                 <button
                   onClick={() => router.push("/asira-wallet/history")}
-                  className="font-bold text-emerald-600"
+                  className="font-bold text-[#1E3A8A]-600"
                 >
                   See all
                 </button>
@@ -204,7 +204,7 @@ setBalance(Number(savedBalance));
                         <p className="font-bold">
                           ₱{Number(tx.amount).toLocaleString()}
                         </p>
-                        <p className="text-xs text-blue-600">{tx.status}</p>
+                        <p className="text-xs text-[#1E3A8A]-600">{tx.status}</p>
                       </div>
                     </div>
                   ))
