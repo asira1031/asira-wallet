@@ -41,7 +41,6 @@ export default function AsiraWalletLoginPage() {
   height={90}
   className="rounded-3xl bg-white p-2 shadow-lg"
 />
-
   <h1 className="mt-4 text-3xl font-bold">
     ASIRA WALLET
   </h1>
