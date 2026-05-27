@@ -9,15 +9,28 @@ export async function POST(req: Request) {
 
     if (!fullName || !mobile || !birthday || !birthPlace || !pin) {
       return NextResponse.json(
-        { message: "Missing required fields." },
+        { ok: false, message: "Missing required fields." },
         { status: 400 }
       );
     }
 
     if (String(pin).length !== 6) {
       return NextResponse.json(
-        { message: "PIN must be 6 digits." },
+        { ok: false, message: "PIN must be 6 digits." },
         { status: 400 }
+      );
+    }
+
+    const { data: existingUser } = await supabase
+      .from("wallet_users")
+      .select("id")
+      .eq("mobile", mobile)
+      .maybeSingle();
+
+    if (existingUser) {
+      return NextResponse.json(
+        { ok: false, message: "Mobile number already registered." },
+        { status: 409 }
       );
     }
 
@@ -41,18 +54,18 @@ export async function POST(req: Request) {
 
     if (error) {
       return NextResponse.json(
-        { message: error.message },
+        { ok: false, message: error.message },
         { status: 500 }
       );
     }
 
     return NextResponse.json({
-      success: true,
+      ok: true,
       user: data,
     });
-  } catch {
+  } catch (error: any) {
     return NextResponse.json(
-      { message: "Server error." },
+      { ok: false, message: error.message || "Server error." },
       { status: 500 }
     );
   }

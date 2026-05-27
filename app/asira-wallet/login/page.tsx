@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 export default function AsiraWalletLoginPage() {
   const router = useRouter();
 
@@ -33,10 +33,23 @@ export default function AsiraWalletLoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-black px-6 py-10 text-white">
       <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8">
-        <h1 className="text-3xl font-bold">ASIRA WALLET</h1>
+       <div className="mb-6 flex flex-col items-center">
+  <Image
+    src="/asira-logo.png"
+    alt="Asira Wallet"
+    width={90}
+    height={90}
+    className="rounded-3xl"
+  />
 
-        <p className="mt-2 text-white/50">Secure wallet login</p>
+  <h1 className="mt-4 text-3xl font-bold">
+    ASIRA WALLET
+  </h1>
 
+  <p className="mt-2 text-white/50">
+    Mobile fintech super app
+  </p>
+</div>
         <div className="mt-8 space-y-5">
           <div>
             <label className="text-sm text-white/60">Phone Number</label>
