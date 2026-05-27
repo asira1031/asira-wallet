@@ -188,19 +188,19 @@ export default function AsiraWalletSignupPage() {
   type="button"
   onClick={handleSignup}
   disabled={loading}
- className="w-full rounded-xl bg-[#245BFF] py-3 font-semibold text-white transition hover:bg-[#1E3A8A]-500"
+ className="w-full rounded-xl bg-[#245BFF] py-3 font-semibold text-white transition hover:bg-[#1E3A8A]"
 >
   {loading ? "Creating account..." : "Continue"}
 </button>
 
         <button
-          type="button"
-          onClick={() =>
-            (window.location.href =
-              "/asira-wallet/login")
-          }
-         className="mt-5 w-full text-sm text-[#1E3A8A]-400 transition hover:text-[#1E3A8A]-300"
-        >
+  type="button"
+  onClick={() =>
+    (window.location.href =
+      "/asira-wallet/login")
+  }
+  className="mt-5 w-full text-sm text-[#1E3A8A] transition hover:text-[#2563EB]"
+>
           Already have an account?
           Login
         </button>
