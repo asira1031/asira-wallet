@@ -1,0 +1,17 @@
+{
+  "name": "Asira Wallet",
+  "short_name": "Asira",
+  "description": "Asira Wallet mobile fintech app",
+  "start_url": "/asira-wallet/login",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00C853",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

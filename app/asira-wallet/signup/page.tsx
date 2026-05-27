@@ -35,6 +35,7 @@ export default function AsiraWalletSignupPage() {
 
     if (!localStorage.getItem("asira_wallet_balance")) {
       localStorage.setItem(`asira_wallet_balance_${mobile}`, "0");
+      localStorage.removeItem("asira_wallet_balance");
     }
 
     window.location.assign("/asira-wallet/dashboard");

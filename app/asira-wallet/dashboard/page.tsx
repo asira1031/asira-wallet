@@ -39,6 +39,16 @@ export default function AsiraWalletDashboard() {
     setPhone(localStorage.getItem("asira_wallet_phone") || "");
    setBalance(Number(localStorage.getItem("asira_wallet_balance") || "0"));
 
+   const userPhone =
+  localStorage.getItem("asira_wallet_phone") || "";
+
+const savedBalance =
+  localStorage.getItem(
+    `asira_wallet_balance_${userPhone}`
+  ) || "0";
+
+setBalance(Number(savedBalance));
+
     const stored = localStorage.getItem("asira_wallet_transactions");
     setTransactions(stored ? JSON.parse(stored) : []);
   }, [router]);
