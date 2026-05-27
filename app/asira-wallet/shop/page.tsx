@@ -92,7 +92,7 @@ export default function ShopPage() {
 
                 <button
                   onClick={() => buyProduct(product)}
-                  className="mt-4 w-full rounded-2xl bg-emerald-600 py-3 font-bold text-white"
+                  className="rounded-2xl bg-gradient-to-r from-[#0B1F6D] to-[#1E3A8A] py-4 font-bold text-white shadow-lg transition hover:from-[#1E3A8A] hover:to-[#2563EB]"
                 >
                   Buy Now
                 </button>
