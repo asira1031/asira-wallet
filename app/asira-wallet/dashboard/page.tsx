@@ -37,7 +37,7 @@ export default function AsiraWalletDashboard() {
 
     setFullName(localStorage.getItem("asira_wallet_full_name") || "Asira User");
     setPhone(localStorage.getItem("asira_wallet_phone") || "");
-    setBalance(Number(localStorage.getItem("asira_wallet_balance") || "0"));
+   setBalance(Number(localStorage.getItem("asira_wallet_balance") || "0"));
 
     const stored = localStorage.getItem("asira_wallet_transactions");
     setTransactions(stored ? JSON.parse(stored) : []);
