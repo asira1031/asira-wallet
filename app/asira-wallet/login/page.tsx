@@ -75,14 +75,13 @@ export default function AsiraWalletLoginPage() {
             />
           </div>
 
-          <button
-            type="button"
-            onClick={handleLogin}
-            className="w-full rounded-2xl bg-green-500 py-4 font-semibold text-black transition-all hover:bg-green-400"
-          >
-            Continue
-          </button>
-
+         <button
+  type="button"
+  onClick={handleLogin}
+  className="w-full rounded-xl bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-500"
+>
+  Continue
+</button>
           <div className="grid grid-cols-2 gap-4">
             <button
               type="button"

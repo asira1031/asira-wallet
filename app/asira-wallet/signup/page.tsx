@@ -184,16 +184,14 @@ export default function AsiraWalletSignupPage() {
           className="mb-6 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none"
         />
 
-        <button
-          type="button"
-          onClick={handleSignup}
-          disabled={loading}
-          className="w-full rounded-xl bg-emerald-500 py-3 font-semibold text-black disabled:opacity-50"
-        >
-          {loading
-            ? "Creating account..."
-            : "Continue"}
-        </button>
+       <button
+  type="button"
+  onClick={handleSignup}
+  disabled={loading}
+  className="w-full rounded-xl bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-500 disabled:opacity-50"
+>
+  {loading ? "Creating account..." : "Continue"}
+</button>
 
         <button
           type="button"
