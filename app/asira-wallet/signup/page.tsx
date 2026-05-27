@@ -102,14 +102,13 @@ export default function AsiraWalletSignupPage() {
     <main className="min-h-screen bg-black px-6 py-10 text-white">
       <div className="mx-auto max-w-md rounded-3xl border border-white/10 bg-white/5 p-8">
        <div className="mb-6 flex flex-col items-center">
-  <Image
-    src="/asira-logo.png"
-    alt="Asira Wallet"
-    width={90}
-    height={90}
-    className="rounded-3xl"
-  />
-
+ <Image
+  src="/asira-logo.png"
+  alt="Asira Wallet"
+  width={90}
+  height={90}
+  className="rounded-3xl bg-white p-2 shadow-lg"
+/>
   <h1 className="mt-4 text-3xl font-bold">
     ASIRA WALLET
   </h1>
