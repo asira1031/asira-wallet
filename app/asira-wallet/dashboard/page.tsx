@@ -109,7 +109,7 @@ setBalance(Number(savedBalance));
 
               <p className="mt-1 text-gray-500">
                 Wallet balance{" "}
-                <span className="font-bold text-emerald-600">
+                <span className="font-bold text-blue-600">
                   Auto cash in
                 </span>
               </p>
@@ -117,14 +117,14 @@ setBalance(Number(savedBalance));
               <div className="mt-6 grid grid-cols-2 gap-3">
                 <button
                   onClick={() => router.push("/asira-wallet/cash-in")}
-                  className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700"
+                className="rounded-2xl bg-blue-100 py-4 font-bold text-blue-700"
                 >
                   ↙ Cash in
                 </button>
 
                 <button
                   onClick={() => router.push("/asira-wallet/send-money")}
-                  className="rounded-2xl bg-emerald-100 py-4 font-bold text-emerald-700"
+                  className="rounded-2xl bg-blue-100 py-4 font-bold text-blue-700"
                 >
                   ↗ Send
                 </button>
@@ -204,7 +204,7 @@ setBalance(Number(savedBalance));
                         <p className="font-bold">
                           ₱{Number(tx.amount).toLocaleString()}
                         </p>
-                        <p className="text-xs text-emerald-600">{tx.status}</p>
+                        <p className="text-xs text-blue-600">{tx.status}</p>
                       </div>
                     </div>
                   ))
