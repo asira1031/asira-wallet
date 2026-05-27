@@ -103,7 +103,7 @@ export default function AsiraWalletSignupPage() {
       <div className="mx-auto max-w-md rounded-3xl border border-white/10 bg-white/5 p-8">
        <div className="mb-6 flex flex-col items-center">
  <Image
-  src="/asira-logo.png"
+  src="/icon-192.png"
   alt="Asira Wallet"
   width={90}
   height={90}
