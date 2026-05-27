@@ -129,7 +129,7 @@ export default function ReferEarnPage() {
 
           <button
             onClick={copyCode}
-            className="mt-5 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white"
+            className="mt-5 w-full rounded-2xl bg-[#1E3A8A]-600 py-4 font-bold text-white"
           >
             Copy Referral Code
           </button>
@@ -154,7 +154,7 @@ export default function ReferEarnPage() {
 
           <button
             onClick={simulateReferral}
-            className="mt-6 w-full rounded-2xl bg-black py-4 font-bold text-white"
+            className="mt-6 w-full rounded-2xl bg-gradient-to-r from-[#0B1F6D] to-[#1E3A8A] py-4 font-bold text-white shadow-lg"
           >
             Simulate Referral Reward
           </button>

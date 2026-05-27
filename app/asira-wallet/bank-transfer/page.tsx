@@ -153,7 +153,7 @@ export default function BankTransferPage() {
 
           <button
             onClick={handleTransfer}
-            className="mt-8 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white"
+            className="w-full rounded-2xl bg-[#1E3A8A] py-4 font-semibold text-white transition hover:bg-[#2563EB]"
           >
             Send Money
           </button>

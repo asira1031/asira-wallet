@@ -93,7 +93,7 @@ export default function RafflePromoPage() {
           ←
         </button>
 
-        <div className="rounded-3xl bg-black p-6 text-white shadow-sm">
+        <div className="rounded-3xl bg-gradient-to-r from-[#0B1F6D] to-[#1E3A8A] p-6 text-white shadow-xl">
           <p className="text-sm text-white/50">Asira Wallet Promo</p>
           <h1 className="mt-3 text-4xl font-bold">Raffle Rewards</h1>
           <p className="mt-2 text-white/50">Buy tickets and win wallet prizes.</p>
@@ -101,12 +101,12 @@ export default function RafflePromoPage() {
 
         <div className="mt-6 rounded-3xl bg-white p-6 shadow-sm">
           <h2 className="text-2xl font-bold">Your Tickets</h2>
-          <p className="mt-3 text-5xl font-bold text-emerald-600">{tickets}</p>
+          <p className="mt-3 text-5xl font-bold text-[#1E3A8A]-600">{tickets}</p>
           <p className="mt-2 text-gray-500">Each ticket costs ₱20.</p>
 
           <button
             onClick={buyTicket}
-            className="mt-6 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white"
+            className="mt-6 w-full rounded-2xl bg-[#1E3A8A]-600 py-4 font-bold text-white"
           >
             Buy Raffle Ticket
           </button>
