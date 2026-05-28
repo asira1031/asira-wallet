@@ -43,7 +43,7 @@ export default function MoreSectionPage() {
       return (
         <div className="space-y-4">
           <Info label="6-Digit PIN" value="Enabled" />
-          <Info label="Biometric Login" value="Coming Soon" />
+          <Info label="Biometric Login" value="Ready for Production" />
           <Info label="Device Lock" value="Active" />
           <Info label="Security Level" value="Standard" />
         </div>
@@ -53,10 +53,10 @@ export default function MoreSectionPage() {
     if (rawSection === "notifications") {
       return (
         <div className="space-y-4">
-          <Info label="Cash In Alerts" value="Enabled" />
-          <Info label="Transfer Alerts" value="Enabled" />
-          <Info label="Promo Alerts" value="Enabled" />
-          <Info label="Email Notifications" value="Coming Soon" />
+          <ToggleInfo label="Cash In Alerts" value="Active" />
+          <ToggleInfo label="Transfer Alerts" value="Active" />
+          <ToggleInfo label="Promo Alerts" value="Active" />
+          <ToggleInfo label="Email Notifications" value="Active" />
         </div>
       );
     }
@@ -78,7 +78,7 @@ export default function MoreSectionPage() {
           <Info label="Support Email" value="support@asira-wallet.com" />
           <Info label="Help Topic" value="Cash In, Send Money, Bills, Crypto" />
           <Info label="Response Time" value="24-48 hours" />
-          <Info label="Emergency Support" value="Coming Soon" />
+          <Info label="Emergency Support" value="Active Soon" />
         </div>
       );
     }
@@ -88,7 +88,7 @@ export default function MoreSectionPage() {
         <div className="space-y-4">
           <Info label="App Name" value="Asira Wallet" />
           <Info label="Version" value="1.0.0 Demo" />
-          <Info label="Environment" value="Development / Vercel" />
+          <Info label="Environment" value="Vercel / Mobile PWA" />
           <Info label="Status" value="Prototype Active" />
         </div>
       );
@@ -119,7 +119,7 @@ export default function MoreSectionPage() {
 
           <button
             onClick={() => router.push("/asira-wallet/dashboard")}
-            className="mt-8 w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white"
+            className="mt-8 w-full rounded-2xl bg-gradient-to-r from-[#0B1F6D] to-[#1E3A8A] py-4 font-bold text-white shadow-lg transition hover:from-[#1E3A8A] hover:to-[#2563EB]"
           >
             Back to Dashboard
           </button>
@@ -134,6 +134,21 @@ function Info({ label, value }: { label: string; value: string }) {
     <div className="rounded-3xl bg-gray-100 p-5">
       <p className="text-sm text-gray-500">{label}</p>
       <p className="mt-2 font-bold">{value}</p>
+    </div>
+  );
+}
+
+function ToggleInfo({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between rounded-3xl bg-gray-100 p-5">
+      <div>
+        <p className="text-sm text-gray-500">{label}</p>
+        <p className="mt-2 font-bold text-[#1E3A8A]">{value}</p>
+      </div>
+
+      <div className="flex h-7 w-14 items-center rounded-full bg-[#1E3A8A] p-1">
+        <div className="ml-auto h-5 w-5 rounded-full bg-white" />
+      </div>
     </div>
   );
 }
