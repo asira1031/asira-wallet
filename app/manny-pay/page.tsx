@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function MannyWalletIntroPage() {
@@ -9,9 +10,14 @@ export default function MannyWalletIntroPage() {
     <main className="min-h-screen bg-[#f7f7f7] px-5 py-8 text-black">
       <div className="mx-auto max-w-sm pb-10">
         <div className="mb-8 text-center">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-black text-4xl text-white shadow-xl">
-            A
-          </div>
+          <Image
+            src="/icon-192.png"
+            alt="Manny Pay"
+            width={90}
+            height={90}
+            priority
+            className="mx-auto rounded-3xl shadow-xl"
+          />
 
           <h1 className="mt-5 text-4xl font-black">Manny Pay</h1>
 
@@ -86,7 +92,7 @@ export default function MannyWalletIntroPage() {
           </button>
 
           <button
-           onClick={() => router.push("/manny-pay/signup")}
+            onClick={() => router.push("/manny-pay/signup")}
             className="rounded-2xl bg-black py-4 font-bold text-white"
           >
             Open Wallet

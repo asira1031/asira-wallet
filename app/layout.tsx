@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   description:
     "Digital wallet for payments, QR transfers, bank transfers, and savings.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/icon-192.png",
+  },
 };
 
 export default function RootLayout({
@@ -15,11 +19,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <meta name="theme-color" content="#000000" />
-        <link rel="apple-touch-icon" href="/icon-192.png" />
-      </head>
-
       <body>
         {children}
 
@@ -32,9 +31,10 @@ export default function RootLayout({
             fontSize: 12,
             color: "#888",
             zIndex: 9999,
+            pointerEvents: "none",
           }}
         >
-          Powered by Manny-pay Infrastructure
+          Powered by Manny Pay Infrastructure
         </div>
       </body>
     </html>
