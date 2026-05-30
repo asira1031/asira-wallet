@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { QRCodeCanvas } from "qrcode.react";
 
 type Tab = "wallet" | "savings" | "credit" | "loans" | "cards";
+type KycStatus = "NOT_SUBMITTED" | "PENDING" | "APPROVED" | "REJECTED";
 
 type WalletTransaction = {
   id: string;
@@ -22,52 +23,128 @@ export default function MannyPayDashboard() {
   const [showQr, setShowQr] = useState(false);
   const [fullName, setFullName] = useState("Manny User");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [balance, setBalance] = useState(0);
+  const [kycStatus, setKycStatus] = useState<KycStatus>("NOT_SUBMITTED");
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
 
   const savingsAccount = "MANNY-SAV-0000000001";
 
   useEffect(() => {
-    const loggedIn = localStorage.getItem("manny_pay_logged_in");
+    const loggedIn =
+      localStorage.getItem("manny_pay_logged_in") ||
+      localStorage.getItem("manny_pay_wallet_logged_in");
 
     if (loggedIn !== "yes") {
       router.push("/manny-pay/login");
       return;
     }
 
-    setFullName(localStorage.getItem("manny_pay_full_name") || "Manny User");
-    setPhone(localStorage.getItem("manny_pay_phone") || "");
-   setBalance(Number(localStorage.getItem("manny_pay_balance") || "0"));
+    const userName =
+      localStorage.getItem("manny_pay_full_name") ||
+      localStorage.getItem("manny_pay_wallet_full_name") ||
+      "Manny User";
 
-   const userPhone =
-  localStorage.getItem("manny_pay_phone") || "";
+    const userPhone =
+      localStorage.getItem("manny_pay_phone") ||
+      localStorage.getItem("manny_pay_wallet_phone") ||
+      "";
 
-const savedBalance =
-  localStorage.getItem(
-    `manny_pay_balance_${userPhone}`
-  ) || "0";
+    const userEmail =
+      localStorage.getItem("manny_pay_email") ||
+      localStorage.getItem("manny_pay_wallet_email") ||
+      "";
 
-setBalance(Number(savedBalance));
+    setFullName(userName);
+    setPhone(userPhone);
+    setEmail(userEmail);
+
+    const savedBalance =
+      localStorage.getItem(`manny_pay_balance_${userPhone}`) ||
+      localStorage.getItem(`manny_pay_wallet_balance_${userPhone}`) ||
+      "0";
+
+    setBalance(Number(savedBalance));
 
     const stored = localStorage.getItem("manny_pay_transactions");
     setTransactions(stored ? JSON.parse(stored) : []);
+
+    loadKycStatus(userEmail);
   }, [router]);
+
+  async function loadKycStatus(userEmail: string) {
+    try {
+      if (!userEmail) {
+        setKycStatus("NOT_SUBMITTED");
+        return;
+      }
+
+      const res = await fetch("/api/manny-pay/admin/kyc", {
+        method: "GET",
+        cache: "no-store",
+      });
+
+      const data = await res.json();
+
+      if (!data.ok) {
+        setKycStatus("NOT_SUBMITTED");
+        return;
+      }
+
+      const records =
+        typeof data.records === "string"
+          ? JSON.parse(data.records)
+          : data.records || [];
+
+      const record = records.find(
+        (item: any) =>
+          String(item.client_email).toLowerCase().trim() ===
+          String(userEmail).toLowerCase().trim()
+      );
+
+      if (!record) {
+        setKycStatus("NOT_SUBMITTED");
+        return;
+      }
+
+      setKycStatus(record.status || "PENDING");
+    } catch (error) {
+      console.error("KYC STATUS ERROR:", error);
+      setKycStatus("NOT_SUBMITTED");
+    }
+  }
+
+  function requireKyc(route: string) {
+    if (kycStatus !== "APPROVED") {
+      alert("KYC verification required before using this feature.");
+      router.push("/manny-pay/kyc");
+      return;
+    }
+
+    router.push(route);
+  }
 
   function handleLogout() {
     localStorage.removeItem("manny_pay_logged_in");
-    localStorage.removeItem("manny_pay_phone");
-    localStorage.removeItem("manny_pay_full_name");
-    localStorage.removeItem("manny_pay_email");
-
+    localStorage.removeItem("manny_pay_wallet_logged_in");
     router.push("/manny-pay/login");
   }
+
+  const kycBadge =
+    kycStatus === "APPROVED"
+      ? "🟢 KYC VERIFIED"
+      : kycStatus === "PENDING"
+      ? "🟡 KYC UNDER REVIEW"
+      : kycStatus === "REJECTED"
+      ? "🔴 KYC REJECTED"
+      : "⚪ KYC NOT SUBMITTED";
 
   return (
     <main className="min-h-screen bg-[#f7f7f7] px-4 py-6 text-black">
       <div className="mx-auto max-w-sm pb-32">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#DBEAFE]-100 text-lg font-black text-[#1E3A8A]-700">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-lg font-black text-blue-900">
               {fullName.charAt(0).toUpperCase()}
             </div>
 
@@ -75,6 +152,7 @@ setBalance(Number(savedBalance));
               <p className="text-sm text-gray-500">Welcome back</p>
               <h2 className="text-lg font-bold">{fullName}</h2>
               {phone && <p className="text-xs text-gray-400">{phone}</p>}
+              {email && <p className="text-xs text-gray-400">{email}</p>}
             </div>
           </div>
 
@@ -84,6 +162,19 @@ setBalance(Number(savedBalance));
           >
             Logout
           </button>
+        </div>
+
+        <div className="mb-5 rounded-3xl bg-white p-4 shadow-sm">
+          <p className="font-bold">{kycBadge}</p>
+
+          {kycStatus !== "APPROVED" && (
+            <button
+              onClick={() => router.push("/manny-pay/kyc")}
+              className="mt-3 w-full rounded-2xl bg-black py-3 font-bold text-white"
+            >
+              Complete KYC
+            </button>
+          )}
         </div>
 
         <div className="mb-6 flex gap-3 overflow-x-auto">
@@ -104,27 +195,25 @@ setBalance(Number(savedBalance));
           <>
             <div className="rounded-3xl bg-white p-5 shadow-sm">
               <h1 className="text-5xl font-bold">
-                ₱{balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                ₱
+                {balance.toLocaleString(undefined, {
+                  minimumFractionDigits: 2,
+                })}
               </h1>
 
-              <p className="mt-1 text-gray-500">
-                Wallet balance{" "}
-                <span className="font-bold text-[#1E3A8A]-600">
-                  Auto cash in
-                </span>
-              </p>
+              <p className="mt-1 text-gray-500">Wallet balance</p>
 
               <div className="mt-6 grid grid-cols-2 gap-3">
                 <button
-                  onClick={() => router.push("/manny-pay/cash-in")}
-                className="rounded-2xl bg-[#DBEAFE]-100 py-4 font-bold text-[#1E3A8A]-700"
+                  onClick={() => requireKyc("/manny-pay/cash-in")}
+                  className="rounded-2xl bg-blue-100 py-4 font-bold text-blue-900"
                 >
                   ↙ Cash in
                 </button>
 
                 <button
-                  onClick={() => router.push("/manny-pay/send-money")}
-                  className="rounded-2xl bg-[#DBEAFE]-100 py-4 font-bold text-[#1E3A8A]-700"
+                  onClick={() => requireKyc("/manny-pay/send-money")}
+                  className="rounded-2xl bg-blue-100 py-4 font-bold text-blue-900"
                 >
                   ↗ Send
                 </button>
@@ -133,31 +222,62 @@ setBalance(Number(savedBalance));
 
             <div className="mt-6 grid grid-cols-4 gap-4 text-center text-sm">
               {[
-                { label: "Bank transfer", icon: "🏦" },
-                { label: "Raffle Promo", icon: "🎟️" },
-                { label: "Crypto", icon: "◆" },
-                { label: "Refer & Earn", icon: "🧍‍♀️💸" },
-                { label: "Load", icon: "📱" },
-                { label: "Bills", icon: "🧾" },
-                { label: "Shop", icon: "🛍️" },
-                { label: "More", icon: "M" },
+                {
+                  label: "Bank transfer",
+                  icon: "🏦",
+                  route: "/manny-pay/bank-transfer",
+                  locked: true,
+                },
+                {
+                  label: "Raffle Promo",
+                  icon: "🎟️",
+                  route: "/manny-pay/raffle-promo",
+                  locked: false,
+                },
+                {
+                  label: "Crypto",
+                  icon: "◆",
+                  route: "/manny-pay/crypto",
+                  locked: true,
+                },
+                {
+                  label: "Refer & Earn",
+                  icon: "🧍‍♀️💸",
+                  route: "/manny-pay/refer-earn",
+                  locked: false,
+                },
+                {
+                  label: "Load",
+                  icon: "📱",
+                  route: "/manny-pay/load",
+                  locked: true,
+                },
+                {
+                  label: "Bills",
+                  icon: "🧾",
+                  route: "/manny-pay/bills",
+                  locked: true,
+                },
+                {
+                  label: "Shop",
+                  icon: "🛍️",
+                  route: "/manny-pay/shop",
+                  locked: false,
+                },
+                {
+                  label: "More",
+                  icon: "M",
+                  route: "/manny-pay/more",
+                  locked: false,
+                },
               ].map((item) => (
                 <button
                   key={item.label}
-                  onClick={() => {
-                    const routes: Record<string, string> = {
-                      "Bank transfer": "/manny-pay/bank-transfer",
-                      "Raffle Promo": "/manny-pay/raffle-promo",
-                      Crypto: "/manny-pay/crypto",
-                      "Refer & Earn": "/manny-pay/refer-earn",
-                      Load: "/manny-pay/load",
-                      Bills: "/manny-pay/bills",
-                      Shop: "/manny-pay/shop",
-                      More: "/manny-pay/more",
-                    };
-
-                    router.push(routes[item.label]);
-                  }}
+                  onClick={() =>
+                    item.locked
+                      ? requireKyc(item.route)
+                      : router.push(item.route)
+                  }
                   className="text-center"
                 >
                   <div className="mb-2 flex h-20 items-center justify-center rounded-3xl bg-white text-3xl font-black shadow-sm">
@@ -175,7 +295,7 @@ setBalance(Number(savedBalance));
 
                 <button
                   onClick={() => router.push("/manny-pay/history")}
-                  className="font-bold text-[#1E3A8A]-600"
+                  className="font-bold text-blue-700"
                 >
                   See all
                 </button>
@@ -204,7 +324,7 @@ setBalance(Number(savedBalance));
                         <p className="font-bold">
                           ₱{Number(tx.amount).toLocaleString()}
                         </p>
-                        <p className="text-xs text-[#1E3A8A]-600">{tx.status}</p>
+                        <p className="text-xs text-blue-700">{tx.status}</p>
                       </div>
                     </div>
                   ))
@@ -215,18 +335,12 @@ setBalance(Number(savedBalance));
         )}
 
         {tab === "savings" && (
-          <>
-            <div className="rounded-3xl bg-white p-5 shadow-sm">
-              <h1 className="text-5xl font-bold">₱0.00</h1>
-              <p className="mt-1 text-gray-500">Total savings</p>
-
-              <p className="mt-5 text-sm text-gray-500">
-                Savings Account Number
-              </p>
-
-              <p className="font-bold">{savingsAccount}</p>
-            </div>
-          </>
+          <div className="rounded-3xl bg-white p-5 shadow-sm">
+            <h1 className="text-5xl font-bold">₱0.00</h1>
+            <p className="mt-1 text-gray-500">Total savings</p>
+            <p className="mt-5 text-sm text-gray-500">Savings Account Number</p>
+            <p className="font-bold">{savingsAccount}</p>
+          </div>
         )}
 
         {tab === "credit" && (
@@ -261,7 +375,7 @@ setBalance(Number(savedBalance));
 
               <div className="mx-auto mb-4 flex h-56 w-56 items-center justify-center rounded-2xl border bg-white p-4">
                 <QRCodeCanvas
-                  value={`manny-pay:${phone || "AW-CLIENT-0001"}`}
+                  value={`manny-pay:${phone || "MP-CLIENT-0001"}`}
                   size={190}
                   level="H"
                   includeMargin

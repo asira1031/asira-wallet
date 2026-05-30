@@ -1,26 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-import { supabase } from "@/lib/supabase";
-
-const links = [
-  { href: "/admin/dashboard", label: "Dashboard" },
-  { href: "/admin/transfers", label: "Transfers" },
-  { href: "/admin/payouts", label: "Payouts" },
-  { href: "/admin/payments", label: "Payments" },
-  { href: "/admin/merchant", label: "Merchant" },
-  { href: "/admin/merchants", label: "Merchants" },
-  { href: "/admin/swift", label: "SWIFT" },
-  { href: "/admin/cards", label: "Cards" },
-  { href: "/admin/bank", label: "Bank" },
-  { href: "/admin/compliance", label: "Compliance" },
-  { href: "/admin/users", label: "Users" },
-  { href: "/admin/reports", label: "Reports" },
-  { href: "/admin/settings", label: "Settings" },
-];
 
 export default function AdminLayout({
   children,
@@ -28,67 +9,57 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-
-  const [loading, setLoading] = useState(true);
-  const [authorized, setAuthorized] = useState(false);
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    async function checkAccess() {
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
+    const loggedIn =
+      localStorage.getItem("manny_pay_logged_in") ||
+      localStorage.getItem("manny_pay_wallet_logged_in");
 
-        if (!user) {
-          router.push("/login");
-          return;
-        }
-
-        setAuthorized(true);
-      } catch (error) {
-        console.log(error);
-        router.push("/login");
-      } finally {
-        setLoading(false);
-      }
+    if (loggedIn !== "yes") {
+      router.push("/manny-pay/login");
+      return;
     }
 
-    checkAccess();
+    setChecking(false);
   }, [router]);
 
-  if (loading) {
+  function handleLogout() {
+    localStorage.removeItem("manny_pay_logged_in");
+    localStorage.removeItem("manny_pay_wallet_logged_in");
+    localStorage.removeItem("manny_pay_phone");
+    localStorage.removeItem("manny_pay_wallet_phone");
+    localStorage.removeItem("manny_pay_full_name");
+    localStorage.removeItem("manny_pay_wallet_full_name");
+
+    router.push("/manny-pay/login");
+  }
+
+  if (checking) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <p className="text-white/50">Checking admin access...</p>
-      </div>
+      <main className="flex min-h-screen items-center justify-center bg-black text-white">
+        Checking admin access...
+      </main>
     );
   }
 
-  if (!authorized) {
-    return null;
-  }
-
   return (
-    <div className="min-h-screen bg-black text-white flex">
-      <aside className="w-64 min-h-screen border-r border-white/10 bg-white/5 p-6 hidden md:block">
-        <h2 className="text-2xl font-black text-emerald-400 mb-8">
-         MANNY
-        </h2>
+    <main className="min-h-screen bg-black text-white">
+      <header className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+        <div>
+          <h1 className="text-xl font-bold">Manny Pay Admin</h1>
+          <p className="text-sm text-white/50">Control Center</p>
+        </div>
 
-        <nav className="space-y-2">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="block rounded-xl px-4 py-3 text-white/70 hover:bg-emerald-500 hover:text-black font-bold transition"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-      </aside>
+        <button
+          onClick={handleLogout}
+          className="rounded-xl bg-red-600 px-4 py-2 text-sm font-bold text-white"
+        >
+          Logout
+        </button>
+      </header>
 
-      <section className="flex-1">{children}</section>
-    </div>
+      {children}
+    </main>
   );
 }

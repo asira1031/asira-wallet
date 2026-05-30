@@ -13,33 +13,68 @@ export default function KYCPage() {
   const [idFile, setIdFile] = useState<File | null>(null);
   const [selfieFile, setSelfieFile] = useState<File | null>(null);
 
-  function handleSubmit() {
-    if (
-      !fullName ||
-      !birthDate ||
-      !address ||
-      !idFile ||
-      !selfieFile
-    ) {
-      alert("Complete all KYC requirements.");
-      return;
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit() {
+    try {
+      if (
+        !fullName ||
+        !birthDate ||
+        !address ||
+        !idFile ||
+        !selfieFile
+      ) {
+        alert("Complete all KYC requirements.");
+        return;
+      }
+
+      setLoading(true);
+
+      const clientEmail =
+  localStorage.getItem("manny_pay_wallet_email") || "guest";
+
+const phone =
+  localStorage.getItem("manny_pay_wallet_phone") || "";
+
+      const formData = new FormData();
+
+      formData.append("clientEmail", clientEmail);
+      formData.append("phone", phone);
+      formData.append("fullName", fullName);
+      formData.append("birthDate", birthDate);
+      formData.append("address", address);
+      formData.append("idFile", idFile);
+      formData.append("selfieFile", selfieFile);
+
+      const res = await fetch(
+        "/api/manny-pay/kyc",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+
+      if (!data.ok) {
+        throw new Error(data.message);
+      }
+
+      localStorage.setItem(
+        "manny_pay_kyc_status",
+        "PENDING"
+      );
+
+      alert(
+        "KYC submitted successfully. Status: PENDING"
+      );
+
+      router.push("/manny-pay/dashboard");
+    } catch (error: any) {
+      alert(error.message || "KYC submission failed.");
+    } finally {
+      setLoading(false);
     }
-
-    localStorage.setItem(
-      "manny_pay_kyc_status",
-      "PENDING"
-    );
-
-    localStorage.setItem(
-      "manny_pay_kyc_name",
-      fullName
-    );
-
-    alert(
-      "KYC submitted successfully. Status: PENDING"
-    );
-
-    router.push("/manny-pay/dashboard");
   }
 
   return (
@@ -68,6 +103,7 @@ export default function KYCPage() {
 
         <div className="mt-6 rounded-3xl bg-white p-6 shadow-sm">
           <div className="space-y-5">
+
             <div>
               <label className="text-sm text-gray-500">
                 Full Name
@@ -149,16 +185,19 @@ export default function KYCPage() {
 
             <button
               onClick={handleSubmit}
+              disabled={loading}
               className="w-full rounded-2xl bg-emerald-600 py-4 font-bold text-white"
             >
-              Submit Verification
+              {loading
+                ? "Uploading..."
+                : "Submit Verification"}
             </button>
+
           </div>
         </div>
 
         <div className="mt-6 rounded-3xl bg-yellow-50 p-5 text-sm text-yellow-800">
-          Demo KYC only. Real identity verification APIs and compliance review
-          will activate during production integration.
+          Submitted KYC documents will be stored and reviewed by Manny Pay administrators.
         </div>
       </div>
     </main>

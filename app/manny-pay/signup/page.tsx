@@ -3,21 +3,24 @@
 import { useState } from "react";
 import Image from "next/image";
 
+type Step = "form" | "email" | "phone";
+
 export default function MannyPaySignupPage() {
+  const [step, setStep] = useState<Step>("form");
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [birthday, setBirthday] = useState("");
   const [birthPlace, setBirthPlace] = useState("");
   const [pin, setPin] = useState("");
-  const [otp, setOtp] = useState("");
 
-  const [otpSent, setOtpSent] = useState(false);
+  const [emailOtp, setEmailOtp] = useState("");
+  const [phoneOtp, setPhoneOtp] = useState("");
+
   const [loading, setLoading] = useState(false);
 
-  async function handleSendOtp() {
-    console.log("SEND OTP BUTTON CLICKED");
-
+  async function handleSendEmailOtp() {
     if (!fullName || !email || !mobile || !birthday || !birthPlace || !pin) {
       alert("Please complete all fields.");
       return;
@@ -33,9 +36,7 @@ export default function MannyPaySignupPage() {
 
       const res = await fetch("/api/manny-pay/send-otp", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName,
           email,
@@ -47,23 +48,23 @@ export default function MannyPaySignupPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data?.message || "Failed to send OTP.");
+        alert(data?.message || "Failed to send email OTP.");
         return;
       }
 
-      setOtpSent(true);
-      alert("OTP sent to your email.");
+      alert("Email OTP sent.");
+      setStep("email");
     } catch (error) {
-      console.error("SEND OTP FRONTEND ERROR:", error);
-      alert("Send OTP error. Please try again.");
+      console.error("SEND EMAIL OTP ERROR:", error);
+      alert("Send email OTP error.");
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleVerifyOtp() {
-    if (!otp) {
-      alert("Please enter OTP.");
+  async function handleVerifyEmailOtp() {
+    if (!emailOtp) {
+      alert("Please enter email OTP.");
       return;
     }
 
@@ -72,19 +73,62 @@ export default function MannyPaySignupPage() {
 
       const res = await fetch("/api/manny-pay/verify-otp", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          otp,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp: emailOtp }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data?.message || "OTP verification failed.");
+        alert(data?.message || "Email OTP verification failed.");
+        return;
+      }
+
+      const phoneRes = await fetch("/api/manny-pay/send-phone-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone: mobile }),
+      });
+
+      const phoneData = await phoneRes.json();
+
+      if (!phoneRes.ok) {
+        alert(phoneData?.message || "Failed to send phone OTP.");
+        return;
+      }
+
+      alert("Email verified. Phone OTP generated. Check terminal for TEST OTP.");
+      setStep("phone");
+    } catch (error) {
+      console.error("VERIFY EMAIL OTP ERROR:", error);
+      alert("Verify email OTP error.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleVerifyPhoneOtp() {
+    if (!phoneOtp) {
+      alert("Please enter phone OTP.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await fetch("/api/manny-pay/verify-phone-otp", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    email,
+    phone: mobile,
+    otp: phoneOtp,
+  }),
+});
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data?.message || "Phone OTP verification failed.");
         return;
       }
 
@@ -94,11 +138,11 @@ export default function MannyPaySignupPage() {
       localStorage.setItem("manny_pay_wallet_phone", mobile);
       localStorage.setItem(`manny_pay_wallet_balance_${mobile}`, "0");
 
-      alert("Email verified. Wallet account created successfully.");
+      alert("Email and phone verified. Wallet account created successfully.");
       window.location.href = "/manny-pay/dashboard";
     } catch (error) {
-      console.error("VERIFY OTP FRONTEND ERROR:", error);
-      alert("Verify OTP error. Please try again.");
+      console.error("VERIFY PHONE OTP ERROR:", error);
+      alert("Verify phone OTP error.");
     } finally {
       setLoading(false);
     }
@@ -118,14 +162,16 @@ export default function MannyPaySignupPage() {
           />
 
           <h1 className="mt-4 text-3xl font-bold">MANNY PAY</h1>
-          <p className="mt-2 text-white/50">Mobile fintech super app</p>
+          <p className="mt-2 text-white/50">
+            Email + phone verification signup
+          </p>
         </div>
 
         <label className="mb-2 block text-sm text-white/60">Full Name</label>
         <input
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          disabled={otpSent}
+          disabled={step !== "form"}
           className="mb-5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none disabled:opacity-60"
         />
 
@@ -134,7 +180,7 @@ export default function MannyPaySignupPage() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          disabled={otpSent}
+          disabled={step !== "form"}
           className="mb-5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none disabled:opacity-60"
         />
 
@@ -142,7 +188,7 @@ export default function MannyPaySignupPage() {
         <input
           value={mobile}
           onChange={(e) => setMobile(e.target.value)}
-          disabled={otpSent}
+          disabled={step !== "form"}
           className="mb-5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none disabled:opacity-60"
         />
 
@@ -151,7 +197,7 @@ export default function MannyPaySignupPage() {
           type="date"
           value={birthday}
           onChange={(e) => setBirthday(e.target.value)}
-          disabled={otpSent}
+          disabled={step !== "form"}
           className="mb-5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none disabled:opacity-60"
         />
 
@@ -159,7 +205,7 @@ export default function MannyPaySignupPage() {
         <input
           value={birthPlace}
           onChange={(e) => setBirthPlace(e.target.value)}
-          disabled={otpSent}
+          disabled={step !== "form"}
           className="mb-5 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none disabled:opacity-60"
         />
 
@@ -170,11 +216,11 @@ export default function MannyPaySignupPage() {
           maxLength={6}
           value={pin}
           onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
-          disabled={otpSent}
+          disabled={step !== "form"}
           className="mb-6 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none disabled:opacity-60"
         />
 
-        {otpSent && (
+        {step === "email" && (
           <>
             <label className="mb-2 block text-sm text-white/60">
               Email OTP Code
@@ -182,8 +228,23 @@ export default function MannyPaySignupPage() {
             <input
               inputMode="numeric"
               maxLength={6}
-              value={otp}
-              onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+              value={emailOtp}
+              onChange={(e) => setEmailOtp(e.target.value.replace(/\D/g, ""))}
+              className="mb-6 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none"
+            />
+          </>
+        )}
+
+        {step === "phone" && (
+          <>
+            <label className="mb-2 block text-sm text-white/60">
+              Phone OTP Code
+            </label>
+            <input
+              inputMode="numeric"
+              maxLength={6}
+              value={phoneOtp}
+              onChange={(e) => setPhoneOtp(e.target.value.replace(/\D/g, ""))}
               className="mb-6 w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 outline-none"
             />
           </>
@@ -191,23 +252,21 @@ export default function MannyPaySignupPage() {
 
         <button
           type="button"
-          onClick={() => {
-            if (otpSent) {
-              handleVerifyOtp();
-            } else {
-              handleSendOtp();
-            }
-          }}
           disabled={loading}
+          onClick={() => {
+            if (step === "form") handleSendEmailOtp();
+            if (step === "email") handleVerifyEmailOtp();
+            if (step === "phone") handleVerifyPhoneOtp();
+          }}
           className="w-full rounded-xl bg-[#245BFF] py-3 font-semibold text-white transition hover:bg-[#1E3A8A] disabled:opacity-60"
         >
           {loading
-            ? otpSent
-              ? "Verifying OTP..."
-              : "Sending OTP..."
-            : otpSent
-            ? "Verify OTP"
-            : "Send OTP"}
+            ? "Processing..."
+            : step === "form"
+            ? "Send Email OTP"
+            : step === "email"
+            ? "Verify Email OTP"
+            : "Verify Phone OTP"}
         </button>
 
         <button
