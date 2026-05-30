@@ -72,7 +72,7 @@ export default function AdminLayout({
     <div className="min-h-screen bg-black text-white flex">
       <aside className="w-64 min-h-screen border-r border-white/10 bg-white/5 p-6 hidden md:block">
         <h2 className="text-2xl font-black text-emerald-400 mb-8">
-          ASIRA
+         MANNY
         </h2>
 
         <nav className="space-y-2">

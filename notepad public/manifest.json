@@ -1,8 +1,8 @@
 {
-  "name": "Asira Wallet",
-  "short_name": "Asira",
+  "name": "Manny Pay",
+  "short_name": "Manny Pay",
   "description": "Digital wallet for payments, transfers, QR, savings, and more.",
-  "start_url": "/asira-wallet",
+  "start_url": "/manny-pay",
   "display": "standalone",
   "background_color": "#f7f7f7",
   "theme_color": "#000000",

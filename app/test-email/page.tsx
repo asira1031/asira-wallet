@@ -9,7 +9,7 @@ export default function TestEmailPage() {
       },
       body: JSON.stringify({
         to: "asira1031@gmail.com",
-        subject: "Asira Wallet Test",
+        subject: "Manny Pay Wallet Test",
         message:
           "Your email notification system is working.",
       }),

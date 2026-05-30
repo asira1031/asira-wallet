@@ -18,7 +18,7 @@ export async function sendEmail({
   try {
     const data = await resend.emails.send({
       from:
-        "Asira Global Remit <onboarding@resend.dev>",
+        "Manny Pay Global Remit <onboarding@resend.dev>",
 
       to,
 

@@ -12,7 +12,7 @@ const initialCards = [
     amount: 1000,
     currency: "USD",
     status: "PROCESSING",
-    linkedTransfer: "ASIRA-101",
+    linkedTransfer: "MANNY-101",
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ const initialCards = [
     amount: 2500,
     currency: "USD",
     status: "APPROVED",
-    linkedTransfer: "ASIRA-102",
+    linkedTransfer: "MANNY-102",
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ const initialCards = [
     amount: 5000,
     currency: "USD",
     status: "COMPLETED",
-    linkedTransfer: "ASIRA-103",
+    linkedTransfer: "MANNY-103",
   },
 ];
 
@@ -148,7 +148,7 @@ export default function AdminCardsPage() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="text-xs text-white/50">
-                      ASIRA VIRTUAL CARD
+                      MANNY VIRTUAL CARD
                     </p>
 
                     <h2 className="text-xl font-black mt-2">

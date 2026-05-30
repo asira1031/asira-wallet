@@ -27,7 +27,7 @@ export default function MerchantPage() {
       return;
     }
 
-    const reference = `ASIRA-${Date.now()}`;
+    const reference = `MANNY-${Date.now()}`;
     const url = `${window.location.origin}/checkout/${reference}`;
 
     const newPayment: Payment = {
