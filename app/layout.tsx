@@ -30,11 +30,12 @@ export default function RootLayout({
             textAlign: "center",
             fontSize: 12,
             color: "#888",
+            letterSpacing: "0.5px",
             zIndex: 9999,
             pointerEvents: "none",
           }}
         >
-          Powered by Manny Pay Infrastructure
+          Powered by Fintech Solutions Provider Inc.
         </div>
       </body>
     </html>
