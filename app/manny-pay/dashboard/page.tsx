@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { QRCodeCanvas } from "qrcode.react";
-
+import Image from "next/image";
 type Tab = "wallet" | "savings" | "credit" | "loans" | "cards";
 type KycStatus = "NOT_SUBMITTED" | "PENDING" | "APPROVED" | "REJECTED";
 
@@ -140,7 +140,8 @@ export default function MannyPayDashboard() {
       : "⚪ KYC NOT SUBMITTED";
 
   return (
-    <main className="min-h-screen bg-[#f7f7f7] px-4 py-6 text-black">
+   
+   <main className="min-h-screen bg-[#f7f7f7] px-4 py-6 text-black">
       <div className="mx-auto max-w-sm pb-32">
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -155,7 +156,16 @@ export default function MannyPayDashboard() {
               {email && <p className="text-xs text-gray-400">{email}</p>}
             </div>
           </div>
-
+<div className="mb-6 overflow-hidden rounded-3xl shadow-xl">
+  <Image
+    src="/manny-pay-home.png"
+    alt="Manny Pay Home"
+    width={1200}
+    height={700}
+    priority
+    className="h-auto w-full object-cover"
+  />
+</div>
           <button
             onClick={handleLogout}
             className="rounded-full bg-red-500 px-4 py-2 text-xs font-bold text-white"
