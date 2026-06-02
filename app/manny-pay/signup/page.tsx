@@ -84,21 +84,14 @@ export default function MannyPaySignupPage() {
         return;
       }
 
-      const phoneRes = await fetch("/api/manny-pay/send-phone-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone: mobile }),
-      });
+    localStorage.setItem("manny_pay_wallet_logged_in", "yes");
+localStorage.setItem("manny_pay_wallet_full_name", fullName);
+localStorage.setItem("manny_pay_wallet_email", email);
+localStorage.setItem("manny_pay_wallet_phone", mobile);
+localStorage.setItem(`manny_pay_wallet_balance_${mobile}`, "0");
 
-      const phoneData = await phoneRes.json();
-
-      if (!phoneRes.ok) {
-        alert(phoneData?.message || "Failed to send phone OTP.");
-        return;
-      }
-
-      alert("Email verified. Phone OTP generated. Check terminal for TEST OTP.");
-      setStep("phone");
+alert("Email verified. Wallet account created successfully.");
+window.location.href = "/manny-pay/dashboard";
     } catch (error) {
       console.error("VERIFY EMAIL OTP ERROR:", error);
       alert("Verify email OTP error.");
