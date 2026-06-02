@@ -113,13 +113,14 @@ export default function MannyPayDashboard() {
       setKycStatus("NOT_SUBMITTED");
     }
   }
+function requireKyc(route: string) {
+  // TEMPORARY KYC BYPASS
 
-  function requireKyc(route: string) {
-    if (kycStatus !== "APPROVED") {
-      alert("KYC verification required before using this feature.");
-      router.push("/manny-pay/kyc");
-      return;
-    }
+  // if (kycStatus !== "APPROVED") {
+  //   alert("KYC verification required before using this feature.");
+  //   router.push("/manny-pay/kyc");
+  //   return;
+  // }
 
     router.push(route);
   }
