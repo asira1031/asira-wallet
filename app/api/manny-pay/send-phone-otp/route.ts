@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import twilio from "twilio";
+
+export const runtime = "nodejs";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+const twilioClient = twilio(
+  process.env.TWILIO_ACCOUNT_SID!,
+  process.env.TWILIO_AUTH_TOKEN!
 );
 
 function makeOtp() {
@@ -22,9 +30,7 @@ export async function POST(req: Request) {
     }
 
     const otp = makeOtp();
-    const expires = new Date(
-      Date.now() + 10 * 60 * 1000
-    ).toISOString();
+    const expires = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
     console.log("PHONE OTP FOR TEST:", otp);
 
@@ -38,9 +44,15 @@ export async function POST(req: Request) {
 
     if (error) throw error;
 
+    await twilioClient.messages.create({
+      body: `Your Manny Pay verification code is: ${otp}`,
+      from: process.env.TWILIO_PHONE_NUMBER!,
+      to: phone,
+    });
+
     return NextResponse.json({
       ok: true,
-      message: "Phone OTP generated.",
+      message: "Phone OTP sent.",
     });
   } catch (error: any) {
     console.error("SEND PHONE OTP ERROR:", error);
@@ -48,7 +60,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         ok: false,
-        message: error.message || "Failed to generate OTP.",
+        message: error.message || "Failed to send phone OTP.",
       },
       { status: 500 }
     );
