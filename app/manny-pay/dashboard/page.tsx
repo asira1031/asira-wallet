@@ -40,10 +40,20 @@ export default function MannyPayDashboard() {
       return;
     }
 
-    const userName =
+    const savedUserName =
       localStorage.getItem("manny_pay_full_name") ||
       localStorage.getItem("manny_pay_wallet_full_name") ||
       "Pay Money User";
+
+    const userName =
+      savedUserName === "Manny Pay User" || savedUserName === "Manny User"
+        ? "Pay Money User"
+        : savedUserName;
+
+    if (userName !== savedUserName) {
+      localStorage.setItem("manny_pay_full_name", userName);
+      localStorage.setItem("manny_pay_wallet_full_name", userName);
+    }
 
     const userPhone =
       localStorage.getItem("manny_pay_phone") ||
