@@ -34,7 +34,7 @@ const menuItems = [
     route: "/manny-pay/more/help-center",
   },
   {
-    title: "About Manny Pay",
+    title: "About Pay Money",
     description: "Version and app information",
     icon: "ℹ️",
     route: "/manny-pay/more/about-manny-pay",
@@ -64,7 +64,7 @@ export default function MorePage() {
 
         <div className="rounded-3xl bg-black p-6 text-white shadow-sm">
           <p className="text-sm text-white/50">
-            Manny Pay
+            Pay Money
           </p>
 
           <h1 className="mt-3 text-4xl font-bold">

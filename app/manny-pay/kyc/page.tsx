@@ -89,7 +89,7 @@ const phone =
 
         <div className="rounded-3xl bg-black p-6 text-white shadow-sm">
           <p className="text-sm text-white/50">
-            Manny Pay
+            Pay Money
           </p>
 
           <h1 className="mt-3 text-4xl font-bold">
@@ -197,7 +197,7 @@ const phone =
         </div>
 
         <div className="mt-6 rounded-3xl bg-yellow-50 p-5 text-sm text-yellow-800">
-          Submitted KYC documents will be stored and reviewed by Manny Pay administrators.
+          Submitted KYC documents will be stored and reviewed by Pay Money administrators.
         </div>
       </div>
     </main>

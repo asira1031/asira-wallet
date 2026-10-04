@@ -100,7 +100,7 @@ export default function NetworkLoadPage() {
           </h1>
 
           <p className="mt-3 text-gray-500">
-            Buy prepaid mobile load using Manny Pay.
+            Buy prepaid mobile load using Pay Money.
           </p>
 
           <div className="mt-8">

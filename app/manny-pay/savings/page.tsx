@@ -137,7 +137,7 @@ export default function SavingsPage() {
 
         <div className="rounded-3xl bg-emerald-600 p-6 text-white shadow-sm">
           <p className="text-sm text-white/70">
-            Manny Savings
+            Pay Money Savings
           </p>
 
           <h1 className="mt-3 text-4xl font-bold">

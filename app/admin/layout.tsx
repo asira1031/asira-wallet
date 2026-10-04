@@ -47,7 +47,7 @@ export default function AdminLayout({
     <main className="min-h-screen bg-black text-white">
       <header className="flex items-center justify-between border-b border-white/10 px-6 py-4">
         <div>
-          <h1 className="text-xl font-bold">Manny Pay Admin</h1>
+          <h1 className="text-xl font-bold">Pay Money Admin</h1>
           <p className="text-sm text-white/50">Control Center</p>
         </div>
 

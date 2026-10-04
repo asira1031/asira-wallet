@@ -65,7 +65,7 @@ export default function CashInPage() {
 
         <h1 className="mb-2 text-3xl font-bold">Cash In</h1>
 
-        <p className="mb-8 text-gray-500">Add money to your Manny Pay Wallet.</p>
+        <p className="mb-8 text-gray-500">Add money to your Pay Money Wallet.</p>
 
         <div className="rounded-3xl bg-white p-5 shadow-sm">
           <label className="text-sm text-gray-500">Amount</label>

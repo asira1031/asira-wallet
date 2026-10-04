@@ -13,6 +13,6 @@ export function getWalletUser() {
     phone: localStorage.getItem("manny_pay_wallet_phone") || "",
     fullName:
       localStorage.getItem("manny_pay_wallet_full_name") ||
-      "Manny Pay User",
+      "Pay Money User",
   };
 }

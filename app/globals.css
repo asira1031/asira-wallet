@@ -30,6 +30,11 @@ button {
 button:hover {
   transform: translateY(-2px);
 }
+
+/* The game lobby owns its full-screen presentation. */
+body:has(.casino-plus) > div[style*="position:fixed"] {
+  display: none !important;
+}
 .input {
   width: 100%;
   border-radius: 16px;

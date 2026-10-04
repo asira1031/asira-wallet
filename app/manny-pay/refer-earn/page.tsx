@@ -9,7 +9,7 @@ export default function ReferEarnPage() {
   const [referrals, setReferrals] = useState(0);
   const [earnings, setEarnings] = useState(0);
 
-  const referralCode = "MANNY-2026";
+  const referralCode = "PAYMONEY-2026";
 
   useEffect(() => {
     const storedReferrals = Number(
@@ -161,7 +161,7 @@ export default function ReferEarnPage() {
         </div>
 
         <div className="mt-6 rounded-3xl bg-yellow-50 p-5 text-sm text-yellow-800">
-          Rewards are automatically credited to your Manny Pay Wallet balance after successful referrals.
+          Rewards are automatically credited to your Pay Money Wallet balance after successful referrals.
         </div>
       </div>
     </main>

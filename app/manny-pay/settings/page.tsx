@@ -30,7 +30,7 @@ export default function WalletSettingsPage() {
         </h1>
 
         <p className="text-white/40 mt-2">
-          MANNY Pay account settings
+          Pay Money account settings
         </p>
 
         <div className="mt-8 space-y-4">

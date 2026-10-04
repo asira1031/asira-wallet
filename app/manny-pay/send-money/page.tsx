@@ -138,7 +138,7 @@ export default function SendMoneyPage() {
         </div>
 
         <p className="mb-4 px-4 text-sm text-gray-500">
-          Send money using your Manny Pay Wallet balance.
+          Send money using your Pay Money Wallet balance.
         </p>
 
         <div className="mb-6 rounded-2xl bg-gray-100 px-4 py-3">

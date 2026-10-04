@@ -93,7 +93,7 @@ export default function BillerPaymentPage() {
           <h1 className="text-3xl font-bold">{biller}</h1>
 
           <p className="mt-3 text-gray-500">
-            Pay your {biller} bill using Manny Pay.
+            Pay your {biller} bill using Pay Money.
           </p>
 
           <div className="mt-8">

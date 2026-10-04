@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MANNY PAY",
+  title: "PAY MONEY",
   description:
     "Digital wallet for payments, QR transfers, bank transfers, and savings.",
   manifest: "/manifest.json",
   icons: {
-    icon: "/icon-192.png",
-    apple: "/icon-192.png",
+    icon: "/pay-money-logo.png",
+    apple: "/pay-money-logo.png",
   },
 };
 

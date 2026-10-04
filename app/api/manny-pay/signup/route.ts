@@ -69,14 +69,14 @@ export async function POST(req: Request) {
       await resend.emails.send({
         from:
           process.env.MANNY_EMAIL_FROM ||
-          "Manny Pay <noreply@manny-pay.com>",
+          "Pay Money <noreply@manny-pay.com>",
         to: email,
-        subject: "Welcome to Manny Pay",
+        subject: "Welcome to Pay Money",
         html: `
           <div style="font-family: Arial, sans-serif; max-width:600px; margin:auto; padding:24px; background:#ffffff; color:#111827;">
             <div style="text-align:center; padding:20px 0;">
               <h1 style="margin:0; font-size:28px; color:#111827;">
-                Welcome to Manny Pay
+                Welcome to Pay Money
               </h1>
               <p style="margin-top:8px; color:#6b7280;">
                 Mobile fintech super app
@@ -87,7 +87,7 @@ export async function POST(req: Request) {
               <p>Hello <strong>${fullName}</strong>,</p>
 
               <p>
-                Thank you for joining <strong>Manny Pay</strong>.
+                Thank you for joining <strong>Pay Money</strong>.
                 Your wallet account has been successfully created.
               </p>
 
@@ -102,18 +102,18 @@ export async function POST(req: Request) {
               </ul>
 
               <p>
-                Your Manny Pay Wallet ID:
+                Your Pay Money Wallet ID:
                 <strong>${walletId}</strong>
               </p>
 
               <p>
                 Best regards,<br />
-                <strong>Manny Pay Team</strong>
+                <strong>Pay Money Team</strong>
               </p>
             </div>
 
             <p style="font-size:12px; color:#6b7280; text-align:center; margin-top:24px;">
-              This is an automated email from Manny Pay. Please do not reply directly to this message.
+              This is an automated email from Pay Money. Please do not reply directly to this message.
             </p>
           </div>
         `,

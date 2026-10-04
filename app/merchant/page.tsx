@@ -45,7 +45,7 @@ export default function MerchantPage() {
       <div className="mx-auto max-w-5xl">
         <div className="rounded-3xl bg-white/5 p-8">
           <p className="text-sm text-white/50">
-            Manny Pay Merchant Portal
+            Pay Money Merchant Portal
           </p>
 
           <h1 className="mt-3 text-5xl font-bold">

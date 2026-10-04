@@ -65,7 +65,7 @@ export default function AdminKYCPage() {
   return (
     <main className="min-h-screen bg-black px-6 py-10 text-white">
       <div className="mx-auto max-w-6xl">
-        <h1 className="text-4xl font-black">Manny Pay KYC Review</h1>
+        <h1 className="text-4xl font-black">Pay Money KYC Review</h1>
         <p className="mt-2 text-white/50">Review submitted IDs and selfies.</p>
 
         {loading ? (

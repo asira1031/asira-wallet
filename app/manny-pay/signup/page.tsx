@@ -146,15 +146,15 @@ window.location.href = "/manny-pay/dashboard";
       <div className="mx-auto max-w-md rounded-3xl border border-white/10 bg-white/5 p-8">
         <div className="mb-6 flex flex-col items-center">
           <Image
-            src="/icon-192.png"
-            alt="Manny Pay Wallet"
+            src="/pay-money-logo.png"
+            alt="Pay Money Wallet"
             width={90}
             height={90}
             priority
             className="rounded-3xl bg-white p-2 shadow-lg"
           />
 
-          <h1 className="mt-4 text-3xl font-bold">MANNY PAY</h1>
+          <h1 className="mt-4 text-3xl font-bold">PAY MONEY</h1>
           <p className="mt-2 text-white/50">
             Email + phone verification signup
           </p>

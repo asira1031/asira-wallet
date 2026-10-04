@@ -54,7 +54,7 @@ export default function LoansPage() {
       amount,
       method,
       status: "Completed",
-      recipient: "Manny Loans",
+      recipient: "Pay Money Loans",
       createdAt: new Date().toISOString(),
     };
 
@@ -94,7 +94,7 @@ export default function LoansPage() {
     addTransaction(
       "Loan Release",
       amount,
-      "Manny Loans"
+      "Pay Money Loans"
     );
 
     alert(`Loan approved: ₱${amount.toLocaleString()}`);
@@ -125,7 +125,7 @@ export default function LoansPage() {
     addTransaction(
       "Loan Repayment",
       activeLoan,
-      "Manny Loans"
+      "Pay Money Loans"
     );
 
     saveLoan(0);
@@ -145,7 +145,7 @@ export default function LoansPage() {
 
         <div className="rounded-3xl bg-purple-600 p-6 text-white shadow-sm">
           <p className="text-sm text-white/70">
-            Manny Loans
+            Pay Money Loans
           </p>
 
           <h1 className="mt-3 text-4xl font-bold">

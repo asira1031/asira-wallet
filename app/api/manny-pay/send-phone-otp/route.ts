@@ -45,7 +45,7 @@ export async function POST(req: Request) {
     if (error) throw error;
 
     await twilioClient.messages.create({
-      body: `Your Manny Pay verification code is: ${otp}`,
+      body: `Your Pay Money verification code is: ${otp}`,
       from: process.env.TWILIO_PHONE_NUMBER!,
       to: phone,
     });

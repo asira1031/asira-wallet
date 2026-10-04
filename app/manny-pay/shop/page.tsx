@@ -10,12 +10,12 @@ type Product = {
 };
 
 const products: Product[] = [
-  { name: "Grocery Voucher", price: 100, merchant: "Manny Market", icon: "🛒" },
-  { name: "Food Voucher", price: 150, merchant: "Manny Food Hub", icon: "🍔" },
-  { name: "Coffee Voucher", price: 120, merchant: "Manny Cafe", icon: "☕" },
-  { name: "Movie Ticket", price: 250, merchant: "Manny Cinema", icon: "🎬" },
-  { name: "Travel Coupon", price: 500, merchant: "Manny Travel", icon: "✈️" },
-  { name: "Gift Card", price: 300, merchant: "Manny Rewards", icon: "🎁" },
+  { name: "Grocery Voucher", price: 100, merchant: "Pay Money Market", icon: "🛒" },
+  { name: "Food Voucher", price: 150, merchant: "Pay Money Food Hub", icon: "🍔" },
+  { name: "Coffee Voucher", price: 120, merchant: "Pay Money Cafe", icon: "☕" },
+  { name: "Movie Ticket", price: 250, merchant: "Pay Money Cinema", icon: "🎬" },
+  { name: "Travel Coupon", price: 500, merchant: "Pay Money Travel", icon: "✈️" },
+  { name: "Gift Card", price: 300, merchant: "Pay Money Rewards", icon: "🎁" },
 ];
 
 export default function ShopPage() {
@@ -70,7 +70,7 @@ export default function ShopPage() {
           <h1 className="text-3xl font-bold">Shop</h1>
 
           <p className="mt-3 text-gray-500">
-            Discover shopping deals and merchants with Manny Pay Wallet.
+            Discover shopping deals and merchants with Pay Money Wallet.
           </p>
 
           <div className="mt-8 space-y-4">

@@ -7,14 +7,14 @@ export default function MoreSectionPage() {
   const router = useRouter();
   const params = useParams();
 
-  const [fullName, setFullName] = useState("Manny User");
+  const [fullName, setFullName] = useState("Pay Money User");
   const [phone, setPhone] = useState("09XXXXXXXXX");
 
   const rawSection = String(params.section || "");
   const section = rawSection.replaceAll("-", " ");
 
   useEffect(() => {
-    setFullName(localStorage.getItem("manny_pay_full_name") || "Manny User");
+    setFullName(localStorage.getItem("manny_pay_full_name") || "Pay Money User");
     setPhone(localStorage.getItem("manny_pay_phone") || "09XXXXXXXXX");
   }, []);
 
@@ -86,7 +86,7 @@ export default function MoreSectionPage() {
     if (rawSection === "about-manny-pay") {
       return (
         <div className="space-y-4">
-          <Info label="App Name" value="Manny Pay" />
+          <Info label="App Name" value="Pay Money" />
           <Info label="Version" value="1.0.0 Demo" />
           <Info label="Environment" value="Vercel / Mobile PWA" />
           <Info label="Status" value="Prototype Active" />

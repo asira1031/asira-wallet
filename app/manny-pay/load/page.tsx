@@ -51,7 +51,7 @@ export default function LoadPage() {
         <h1 className="text-4xl font-bold">Load</h1>
 
         <p className="mt-3 text-gray-500">
-          Buy prepaid mobile load using Manny Pay.
+          Buy prepaid mobile load using Pay Money.
         </p>
 
         <div className="mt-8 grid grid-cols-2 gap-4">

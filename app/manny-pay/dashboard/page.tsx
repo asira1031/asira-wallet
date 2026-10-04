@@ -21,14 +21,14 @@ export default function MannyPayDashboard() {
 
   const [tab, setTab] = useState<Tab>("wallet");
   const [showQr, setShowQr] = useState(false);
-  const [fullName, setFullName] = useState("Manny User");
+  const [fullName, setFullName] = useState("Pay Money User");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [balance, setBalance] = useState(0);
   const [kycStatus, setKycStatus] = useState<KycStatus>("NOT_SUBMITTED");
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
 
-  const savingsAccount = "MANNY-SAV-0000000001";
+  const savingsAccount = "PAYMONEY-SAV-0000000001";
 
   useEffect(() => {
     const loggedIn =
@@ -43,7 +43,7 @@ export default function MannyPayDashboard() {
     const userName =
       localStorage.getItem("manny_pay_full_name") ||
       localStorage.getItem("manny_pay_wallet_full_name") ||
-      "Manny User";
+      "Pay Money User";
 
     const userPhone =
       localStorage.getItem("manny_pay_phone") ||
@@ -159,8 +159,8 @@ function requireKyc(route: string) {
           </div>
 <div className="mb-6 overflow-hidden rounded-3xl shadow-xl">
   <Image
-    src="/manny-pay-home.png"
-    alt="Manny Pay Home"
+    src="/pay-money-home.png"
+    alt="Pay Money Home"
     width={1200}
     height={700}
     priority
@@ -276,6 +276,12 @@ function requireKyc(route: string) {
                   locked: false,
                 },
                 {
+                  label: "Games",
+                  icon: "🎮",
+                  route: "/manny-pay/casino-plus",
+                  locked: false,
+                },
+                {
                   label: "More",
                   icon: "M",
                   route: "/manny-pay/more",
@@ -363,7 +369,7 @@ function requireKyc(route: string) {
 
         {tab === "loans" && (
           <div className="rounded-3xl bg-white p-5 shadow-sm">
-            <h1 className="text-3xl font-bold">Manny Loans</h1>
+            <h1 className="text-3xl font-bold">Pay Money Loans</h1>
             <p className="mt-3 text-gray-500">
               Check your loan eligibility and status.
             </p>
@@ -372,7 +378,7 @@ function requireKyc(route: string) {
 
         {tab === "cards" && (
           <div className="rounded-3xl bg-white p-5 shadow-sm">
-            <h1 className="text-3xl font-bold">Manny Card</h1>
+            <h1 className="text-3xl font-bold">Pay Money Card</h1>
             <p className="mt-3 text-gray-500">
               Your virtual card will appear here.
             </p>
@@ -386,7 +392,7 @@ function requireKyc(route: string) {
 
               <div className="mx-auto mb-4 flex h-56 w-56 items-center justify-center rounded-2xl border bg-white p-4">
                 <QRCodeCanvas
-                  value={`manny-pay:${phone || "MP-CLIENT-0001"}`}
+                  value={`pay-money:${phone || "PM-CLIENT-0001"}`}
                   size={190}
                   level="H"
                   includeMargin

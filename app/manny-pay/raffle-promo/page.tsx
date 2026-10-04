@@ -33,7 +33,7 @@ export default function RafflePromoPage() {
       id: reference,
       type: "Raffle Ticket",
       amount: price,
-      method: "Manny Pay Raffle Promo",
+      method: "Pay Money Raffle Promo",
       status: "Completed",
       recipient: `Ticket #${updatedTickets}`,
       createdAt: new Date().toISOString(),
@@ -69,7 +69,7 @@ export default function RafflePromoPage() {
       id: reference,
       type: "Raffle Prize",
       amount: prize,
-      method: "Manny Pay Raffle Promo",
+      method: "Pay Money Raffle Promo",
       status: "Completed",
       recipient: "Promo Reward",
       createdAt: new Date().toISOString(),
@@ -94,7 +94,7 @@ export default function RafflePromoPage() {
         </button>
 
         <div className="rounded-3xl bg-gradient-to-r from-[#0B1F6D] to-[#1E3A8A] p-6 text-white shadow-xl">
-          <p className="text-sm text-white/50">Manny Pay Raffle Promo</p>
+          <p className="text-sm text-white/50">Pay Money Raffle Promo</p>
           <h1 className="mt-3 text-4xl font-bold">Raffle Rewards</h1>
           <p className="mt-2 text-white/50">Buy tickets and win wallet prizes.</p>
         </div>

@@ -22,7 +22,7 @@ export default function ReceiptPage() {
   }, []);
 
   const type = receipt?.type || "Transaction";
-  const method = receipt?.method || "Manny Pay Wallet";
+  const method = receipt?.method || "Pay Money Wallet";
   const recipient = receipt?.recipient || "-";
   const amount = receipt?.amount || 0;
   const reference = receipt?.id || "-";

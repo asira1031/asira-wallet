@@ -26,7 +26,7 @@ export default function MannyPayLoginPage() {
 
     localStorage.setItem(
       "manny_pay_full_name",
-      localStorage.getItem("manny_pay_full_name") || "Manny Pay User"
+      localStorage.getItem("manny_pay_full_name") || "Pay Money User"
     );
 
     router.push("/manny-pay/dashboard");
@@ -37,8 +37,8 @@ export default function MannyPayLoginPage() {
       <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl">
         <div className="mb-8 flex flex-col items-center">
           <Image
-            src="/icon-192.jpg"
-            alt="Manny Pay"
+            src="/pay-money-logo.png"
+            alt="Pay Money"
             width={320}
             height={120}
             priority

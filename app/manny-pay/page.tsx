@@ -11,15 +11,15 @@ export default function MannyWalletIntroPage() {
       <div className="mx-auto max-w-sm pb-10">
         <div className="mb-8 text-center">
           <Image
-            src="/icon-192.png"
-            alt="Manny Pay"
+            src="/pay-money-logo.png"
+            alt="Pay Money"
             width={90}
             height={90}
             priority
             className="mx-auto rounded-3xl shadow-xl"
           />
 
-          <h1 className="mt-5 text-4xl font-black">Manny Pay</h1>
+          <h1 className="mt-5 text-4xl font-black">Pay Money</h1>
 
           <p className="mt-3 text-gray-500">
             A secure digital wallet for cash-in, send money, QR payments,
@@ -28,10 +28,10 @@ export default function MannyWalletIntroPage() {
         </div>
 
         <div className="rounded-3xl bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-bold">What is Manny Pay?</h2>
+          <h2 className="text-2xl font-bold">What is Pay Money?</h2>
 
           <p className="mt-3 text-gray-500">
-            Manny Pay is built to help users manage money safely and easily
+            Pay Money is built to help users manage money safely and easily
             through a simple mobile-style wallet dashboard.
           </p>
 
@@ -62,7 +62,7 @@ export default function MannyWalletIntroPage() {
           <h2 className="text-2xl font-bold">Wallet Policy</h2>
 
           <p className="mt-3 text-sm text-white/70">
-            By using Manny Pay, users agree to provide accurate account
+            By using Pay Money, users agree to provide accurate account
             information, protect their login access, and use the wallet only for
             lawful transactions.
           </p>
@@ -77,7 +77,7 @@ export default function MannyWalletIntroPage() {
           <h2 className="text-2xl font-bold">Privacy & Security</h2>
 
           <p className="mt-3 text-sm text-gray-500">
-            Manny Pay is designed with account protection, transaction
+            Pay Money is designed with account protection, transaction
             monitoring, and secure access in mind. Never share your password,
             OTP, or wallet access with anyone.
           </p>
@@ -100,7 +100,7 @@ export default function MannyWalletIntroPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-gray-400">
-          © 2026 Manny Pay. All rights reserved.
+          © 2026 Pay Money. All rights reserved.
         </p>
       </div>
     </main>

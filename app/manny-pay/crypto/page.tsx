@@ -69,7 +69,7 @@ export default function CryptoPage() {
         </button>
 
         <div className="rounded-3xl bg-black p-6 text-white shadow-sm">
-          <p className="text-sm text-white/50">Manny Pay Crypto Wallet</p>
+          <p className="text-sm text-white/50">Pay Money Crypto Wallet</p>
 
           <h1 className="mt-3 text-4xl font-bold">
             ₱{totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -156,13 +156,13 @@ export default function CryptoPage() {
           <h2 className="text-xl font-bold">Wallet Address</h2>
 
           <p className="mt-3 break-all rounded-2xl bg-gray-100 p-4 text-sm text-gray-600">
-            0xmanny000000000000000000000000000000000000
+            0xpaymoney000000000000000000000000000000000
           </p>
 
           <button
             onClick={() =>
               navigator.clipboard.writeText(
-                "0xmanny000000000000000000000000000000000000"
+                "0xpaymoney000000000000000000000000000000000"
               )
             }
             className="mt-4 w-full rounded-2xl bg-emerald-600 py-3 font-bold text-white"
