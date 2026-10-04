@@ -59,6 +59,18 @@ export default function CasinoPlusPage() {
         </section>
 
         <section className="mt-7">
+          <button
+            type="button"
+            onClick={() => router.push("/manny-pay/playground")}
+            className="mb-6 flex w-full items-center gap-4 rounded-3xl border border-amber-300/30 bg-gradient-to-r from-[#0e63df] to-[#f33228] p-5 text-left shadow-xl transition hover:-translate-y-1"
+          >
+            <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-3xl">🎮</span>
+            <span className="flex-1">
+              <span className="block text-lg font-black">Playground demos</span>
+              <span className="mt-1 block text-sm text-white/80">Try our original free-to-play mini games.</span>
+            </span>
+            <span aria-hidden className="text-xl">→</span>
+          </button>
           <h2 className="text-xl font-black">Official game platforms</h2>
           <p className="mt-1 text-sm text-white/55">Select a provider to continue.</p>
 
