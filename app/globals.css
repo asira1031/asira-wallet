@@ -32,7 +32,6 @@ button:hover {
 }
 
 /* The game lobby owns its full-screen presentation. */
-body:has(.casino-plus) > div[style*="position:fixed"],
 body:has(.nexus-platform) > div[style*="position:fixed"] {
   display: none !important;
 }

@@ -286,12 +286,6 @@ function requireKyc(route: string) {
                   locked: false,
                 },
                 {
-                  label: "Games",
-                  icon: "🎮",
-                  route: "/manny-pay/casino-plus",
-                  locked: false,
-                },
-                {
                   label: "More",
                   icon: "M",
                   route: "/manny-pay/more",
