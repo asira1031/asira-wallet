@@ -19,13 +19,6 @@ const platforms = [
     accent: "from-[#0e63df] to-[#123f98]",
   },
   {
-    name: "Hann Live Online",
-    description: "Open the official Hann Live Online platform.",
-    href: "https://hannliveonline.com/",
-    icon: "H",
-    accent: "from-[#d79b2f] to-[#5c2b12]",
-  },
-  {
     name: "NUSTAR",
     description: "Open the official NUSTAR online platform.",
     href: "https://www.nustaronline.ph/",
