@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Game = "lucky" | "wheel" | "bingo";
+type View = Game | "lobby";
 
 const symbols = ["☀️", "🥭", "🚍", "⭐", "❤️"];
 const bingoCard = [2, 6, 11, 15, 20, 22, 27, 31, 38, 41, 47, 52, 58, 63, 68];
@@ -12,7 +13,7 @@ const wheelRewards = ["+10 XP", "+15 XP", "+20 XP", "+25 XP", "Try again", "+30 
 
 export default function PlaygroundPage() {
   const router = useRouter();
-  const [game, setGame] = useState<Game>("lucky");
+  const [game, setGame] = useState<View>("lobby");
   const [reels, setReels] = useState(["☀️", "🚍", "🥭"]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [message, setMessage] = useState("Ready for a quick play?");
@@ -80,17 +81,38 @@ export default function PlaygroundPage() {
           </div>
         </header>
 
-        <div className="grid grid-cols-3 rounded-2xl border border-white/10 bg-slate-950/60 p-1 backdrop-blur">
-          {[
-            ["lucky", "Lucky Bayan", "☀️"],
-            ["wheel", "Fiesta Wheel", "🎡"],
-            ["bingo", "Bingo Rush", "🎱"],
-          ].map(([id, label, icon]) => (
-            <button key={id} type="button" onClick={() => setGame(id as Game)} className={`rounded-xl px-2 py-3 text-center text-xs font-bold transition ${game === id ? "bg-[#f33228] text-white shadow-lg" : "text-white/60 hover:bg-white/10"}`}>
-              <span className="block text-lg">{icon}</span>{label}
-            </button>
-          ))}
-        </div>
+        {game === "lobby" && (
+          <section className="mt-3 space-y-4" aria-label="Playground games">
+            <h2 className="text-center text-xl font-black">Choose a game</h2>
+            {[
+              { id: "lucky", name: "Lucky Bayan", description: "Match fiesta symbols and earn demo XP.", icon: "☀️", accent: "from-[#f33228] to-[#c41831]", artwork: "🌞 🥭 🚍" },
+              { id: "wheel", name: "Fiesta Wheel", description: "Tap the colorful wheel for a demo round.", icon: "🎡", accent: "from-[#0e63df] to-[#173f9b]", artwork: "🎡 ✨ 🎉" },
+              { id: "bingo", name: "Bingo Rush", description: "Draw numbers and mark your bingo card.", icon: "🎱", accent: "from-[#673ab7] to-[#34216f]", artwork: "🎱 7 25" },
+            ].map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setGame(item.id as Game)}
+                className="group relative w-full overflow-hidden rounded-[2rem] border border-white/20 bg-[#071b3b]/90 p-5 text-left shadow-2xl transition hover:-translate-y-1 hover:border-amber-300/60"
+              >
+                <div className={`absolute inset-y-0 right-0 w-2/5 bg-gradient-to-bl ${item.accent} opacity-75`} />
+                <div className="relative flex items-center gap-4">
+                  <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-4xl shadow-lg">{item.icon}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-xl font-black">{item.name}</span>
+                    <span className="mt-1 block text-sm leading-5 text-white/70">{item.description}</span>
+                    <span className="mt-4 inline-flex rounded-xl bg-white px-4 py-2 text-sm font-black text-[#06152f]">PLAY <span className="ml-2">→</span></span>
+                  </span>
+                  <span aria-hidden className="hidden text-right text-2xl sm:block">{item.artwork}</span>
+                </div>
+              </button>
+            ))}
+          </section>
+        )}
+
+        {game !== "lobby" && (
+          <button type="button" onClick={() => setGame("lobby")} className="mt-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-white/80 hover:bg-white/20">← All games</button>
+        )}
 
         {game === "lucky" && (
           <section className="mt-6 overflow-hidden rounded-[2rem] border border-blue-300/20 bg-[#06152f]/85 p-5 shadow-2xl backdrop-blur">
